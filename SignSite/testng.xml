@@ -1,0 +1,61 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="FullSuite"> <!-- mvn clean test --> <!-- This to test all -->
+  
+  <!-- Category Package Test Cases -->
+  <test name="CategoryTests"> <!-- mvn -Dtest=category.* test --> <!-- This to test this package -->
+    <classes>
+      <class name="category.AddCategory"/> <!-- mvn -Dtest=category.AddCategory test --> <!-- This to test this class -->
+      <class name="category.DeleteCategory"/>
+      <class name="category.EditCategory"/>
+    </classes>
+  </test>
+
+  <!-- Products Package Test Cases -->
+  <test name="ProductsTests">
+    <classes>
+      <class name="products.AddProduct"/>
+      <class name="products.DeleteProduct"/>
+      <class name="products.EditProduct"/>
+    </classes>
+  </test>
+
+  <!-- Machinery Package Test Cases -->
+  <test name="MachineryTests">
+    <classes>
+      <class name="machinery.AddMachinery"/>
+      <class name="machinery.DeleteMachinery"/>
+      <class name="machinery.EditMachinery"/>
+    </classes>
+  </test>
+
+  <!-- Labour Package Test Cases -->
+  <test name="LabourTests">
+    <classes>
+      <class name="labour.AddLabour"/>
+      <class name="labour.DeleteLabour"/>
+      <class name="labour.EditLabour"/>
+    </classes>
+  </test>
+
+  <!-- Materials Package Test Cases -->
+  <test name="MaterialsTests">
+    <classes>
+      <class name="materials.AddMaterial"/>
+      <class name="materials.DeleteMaterial"/>
+      <class name="materials.EditMaterial"/>
+    </classes>
+  </test>
+  
+   <!-- Customers Package Test Cases -->
+  <test name="CustomersTests"> <!-- mvn -Dtest=customers.* test --> <!-- This to test this package -->
+    <classes>
+      <class name="customers.AddNewCustomer"/>
+      <class name="customers.EditCustomer"/>
+      <class name="customers.SearchFilterandPagination"/>
+      <class name="customers.DeleteCustomer"/>
+      <class name="customers.ValidationCheck"/>
+    </classes>
+  </test>
+  
+
+</suite>
