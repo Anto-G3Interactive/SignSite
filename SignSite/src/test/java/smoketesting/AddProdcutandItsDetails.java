@@ -32,6 +32,12 @@ public class AddProdcutandItsDetails extends Initialstep
 		AddCategories("Labour");
 	}
 	
+	@Test (dependsOnMethods= "AddCategory")
+	public void AddNewMaterial()
+	{
+		
+	}
+	
 	public void AddCategories(String Type) throws InterruptedException, IOException
 	{
 		EIC.AddNewCategoryButton();
@@ -55,4 +61,6 @@ public class AddProdcutandItsDetails extends Initialstep
 			takescreenshot(driver, "Failed to add the '"+ TypeOrDetail);
 		}
 	}
+	
+	
 }
