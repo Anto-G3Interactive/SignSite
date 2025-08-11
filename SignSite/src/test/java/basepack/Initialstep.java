@@ -106,8 +106,10 @@ public class Initialstep
 	    String userHome = System.getProperty("user.home");
 	    String downloadsFolder = userHome + File.separator + "Pictures" + File.separator;
 	    String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
+	    
+	    File screenshotLocation = new File(downloadsFolder + screenshotName + currentDateTime + ".png");	    
 	    File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-	    File screenshotLocation = new File(downloadsFolder + screenshotName + currentDateTime + ".png");
+	    
 	    FileUtils.copyFile(screenshot, screenshotLocation);
 	    testcase.addScreenCaptureFromPath(screenshotLocation.getAbsolutePath());
 	}

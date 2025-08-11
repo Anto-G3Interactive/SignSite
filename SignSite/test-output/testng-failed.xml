@@ -3,14 +3,16 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="users.SearchFilterandPagination">
+      <class name="customers.ValidationCheck">
         <methods>
+          <include name="InvalidData"/>
+          <include name="mandatorycheck"/>
           <include name="Login"/>
           <include name="Close"/>
-          <include name="SearchandFilter"/>
-          <include name="ColumChooser"/>
+          <include name="NotInRange"/>
+          <include name="DuplicateBusinessName"/>
         </methods>
-      </class> <!-- users.SearchFilterandPagination -->
+      </class> <!-- customers.ValidationCheck -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
