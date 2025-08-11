@@ -600,24 +600,476 @@ public class ElementsInQuotesPage extends Initialstep
 			driver.findElement(By.xpath("//button[text()= 'Send Email']")).click();
 		}
 		
-		public void ToCustomer(String Customer)
-		{
-			driver.findElement(By.xpath("//div[contains (@id, 'select-customer')]")).click();
-			SelectDropdownValue(Customer);
-		}
-		
-		public void CC(String CC)
-		{
-			driver.findElement(By.xpath("//div[contains(@class, 'css-1kmkvia')]")).click();
-			SelectDropdownValue(CC);
-		}
+			public void ToCustomer(String Customer)
+			{
+				driver.findElement(By.xpath("//div[contains (@id, 'select-customer')]")).click();
+				SelectDropdownValue(Customer);
+			}
+			
+			public void CC(String CC)
+			{
+				driver.findElement(By.xpath("//div[contains(@class, 'css-1kmkvia')]")).click();
+				SelectDropdownValue(CC);
+			}
+			
+			public void ClickOnRequestReadRecipt(String EnableOrDisable)
+			{
+				WebElement e= driver.findElement(By.xpath("//label[text()= 'Request Read Reciept']/..//input"));
+				boolean shouldEnable = EnableOrDisable.trim().equalsIgnoreCase("enable");
+
+			    if (e.isSelected() != shouldEnable)
+			    {
+			        e.click();
+			    }
+			}
+			
+			public void EmailTemplate(String Template)
+			{
+				driver.findElement(By.xpath("//p[text()= 'Email Template']/..//input")).click();
+				SelectDropdownValue(Template);
+			}
+			
+			public void Subject(String subject) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//input[@placeholder= 'Enter your Subject']"));
+				ClearAndEnterValue(e, subject);
+			}
+			
+			public void Message(String Message) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//div[@data-placeholder= 'Enter Message']"));
+				ClearAndEnterValue(e, Message);
+			}
+			
+			public void ClickOnIncludeLinkForPayment(String EnableOrDisable)
+			{
+				WebElement e= driver.findElement(By.xpath("//label[text()= 'Include Link For Payment']/..//input"));
+				boolean shouldEnable = EnableOrDisable.trim().equalsIgnoreCase("enable");
+
+			    if (e.isSelected() != shouldEnable)
+			    {
+			        e.click();
+			    }
+			}
+			
+			public void UploadAttachments(String Path)
+			{
+				driver.findElement(By.xpath("//input[@id= 'upload-image']")).sendKeys(Path);
+			}
+			
+			public void SendButton()
+			{
+				driver.findElement(By.xpath("//p[text()= 'Send an Email']/../..//button[contains(@class, 'css-1rz2d4g')]")).click();
+			}
+			
+			public void CloseButtonInSendAnEmail()
+			{
+				driver.findElement(By.xpath("//button[contains(@class, 'css-1fntcqw')]")).click();
+			}
 		    
-	// Items
+	// Add Items
 		public void AddItemsButton()
 		{
 			driver.findElement(By.xpath("//button[text()= 'Add Items']")).click();
 		}
-		    
+		
+			public void AddItemSelectProduct(String Product)
+			{
+				driver.findElement(By.xpath("//input[contains(@class, 'css-fvgl9b')]")).click();
+				SelectDropdownValue(Product);
+			}
+			
+			public void AddItemViewProductDetails()
+			{
+				driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-fef8xl']")).click();
+			}
+			
+			public void AddItemEditItemNameAddItem(String Name) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//input[@name= 'itemName']"));
+				ClearAndEnterValue(e, Name);
+			}
+			
+			public void AddItemEditQuantity(String Qty) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//input[@name= 'quantity']"));
+				ClearAndEnterValue(e, Qty);
+			}
+			
+			public void AddItemEditUnitDiscount(String Discount) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//input[@name= 'unitDiscount']"));
+				ClearAndEnterValue(e, Discount);
+			}
+			
+			public void AddItemEditUnitPrice(String Price) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//input[@name= 'unitPrice']"));
+				ClearAndEnterValue(e, Price);
+			}
+			
+			public void AddItemAddOrEditDescription(String Description) throws InterruptedException
+			{
+				driver.findElement(By.xpath("//button[text()= 'Add Description']")).click();
+				WebElement e= driver.findElement(By.xpath("//div[@data-placeholder= 'Enter Description']"));
+				ClearAndEnterValue(e, Description);
+			}
+			
+			public void AddItemUploadItemImage(String Path)
+			{
+				driver.findElement(By.xpath("//input[@id= 'upload-image']")).sendKeys(Path);
+			}
+			
+			public void AddItemAdditionlInfroButton()
+			{
+				driver.findElement(By.xpath("//button[text()= 'Additional Info']")).click();
+			}
+			
+				public void AddItemInternalNotes(String Notes) throws InterruptedException
+				{
+					WebElement e= driver.findElement(By.xpath("//textarea[@name= 'internalNotes']"));
+					ClearAndEnterValue(e, Notes);
+				}
+				
+				public void AddItemDesignDetails(String Details) throws InterruptedException
+				{
+					WebElement e= driver.findElement(By.xpath("//textarea[@name= 'designDetails']"));
+					ClearAndEnterValue(e, Details);
+				}
+				
+				public void AddItemProductionDetails(String Details) throws InterruptedException 
+				{
+					WebElement e= driver.findElement(By.xpath("//textarea[@name= 'productionDetails']"));
+					ClearAndEnterValue(e, Details);
+				}
+				
+				public void AddItemInstallationDetails(String Details) throws InterruptedException 
+				{
+					WebElement e= driver.findElement(By.xpath("//textarea[@name= 'installationDetails']"));
+					ClearAndEnterValue(e, Details);
+				}
+				
+				public void AddItemShippingDetails(String Details) throws InterruptedException 
+				{
+					WebElement e= driver.findElement(By.xpath("//textarea[@name= 'shippingDetails']"));
+					ClearAndEnterValue(e, Details);
+				}
+				
+				public void AddItemShippingTracking(String Tracking) throws InterruptedException 
+				{
+					WebElement e= driver.findElement(By.xpath("//textarea[@name= 'shippingTracking']"));
+					ClearAndEnterValue(e, Tracking);
+				}
+			
+			public void SaveLineItemButton()
+			{
+				driver.findElement(By.xpath("//p[text()= 'Add New Item']/../..//button[text()= 'Save']")).click();
+			}
+			
+			public void CloseModalbutton()
+			{
+				driver.findElement(By.xpath("//button[contains(@class, 'css-1fntcqw')]")).click();
+			}
+	
+	// Import Products
+		public void ImportProducts()
+		{
+			driver.findElement(By.xpath("//button[text()='Import Products']")).click();
+		}
+		
+	// Items
+		public void ItemCollapseOrExpand()
+		{
+			driver.findElement(By.xpath("//button[contains(@class, 'css-mfslm7')]")).click();
+		}
+		
+		// Edit Item Details & Description
+		
+			public void ItemEditName(String name) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("(//div[contains(@class, 'css-1axth77')]//input)[1]"));
+				ClearAndEnterValue(e, name);
+			}
+			
+			public void ItemEditQuantity(String Quantity) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("(//div[contains(@class, 'css-1axth77')]//input)[2]"));
+				ClearAndEnterValue(e, Quantity);
+			}
+			
+			public void ItemEditUnitDiscount(String Discount) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("(//div[contains(@class, 'css-1axth77')]//input)[3]"));
+				ClearAndEnterValue(e, Discount);
+			}
+			
+			public void ItemEditUnitPrice(String UnitPrice) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("(//div[contains(@class, 'css-1axth77')]//input)[4]"));
+				ClearAndEnterValue(e, UnitPrice);
+			}
+			
+			public void ItemEditTotalPrice(String TotalPrice) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("(//div[contains(@class, 'css-1axth77')]//input)[5]"));
+				ClearAndEnterValue(e, TotalPrice);
+			}
+			
+			public void ItemDescriptionEditButton()
+			{
+				driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-1jb4d7f']//button[contains(@class, 'css-1rh62m4')]")).click();
+			}
+			
+			public void ItemEditDescritpion(String data) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//div[@class= 'ql-editor']"));
+				ClearAndEnterValue(e, data);
+			}
+			
+			public void ExpandAllOrCollapseAllButton()
+			{
+				driver.findElement(By.xpath("//button[contains(@class, 'css-qg4pbq')]")).click();
+			}
+			
+			public void AddDescriptionImage(String Path)
+			{
+				driver.findElement(By.xpath("//input[@type= 'file']")).sendKeys(Path);
+			}
+			
+			public void ItemSaveButton()
+			{
+				driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-gg4vpm']//button[text()= 'Save']")).click();
+			}
+			
+			// Price Breakdown
+			
+				public void PriceBreakdown()
+				{
+					driver.findElement(By.xpath("//button[contains(@class, 'css-5n3njm')]")).click();
+				}
+				
+				public void ItemsAddMaterialButton()
+				{
+					driver.findElement(By.xpath("//div[text()= 'Material']/..//button[contains(@class, 'css-e6h54s')]")).click();
+				}
+				// Add Material
+				
+				// Edit & Delete Material
+					public void ItemsMaterialDeleteButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Material']/../..//button[contains(@class, 'css-vacoer')]")).click();
+					}
+					
+					public void ItemsMaterialEditButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Material']/../..//button[contains(@class, 'css-1rh62m4')]"));
+					}
+					
+					public void ItemsMaterialEditQuantitiy(String Quantity) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Material']/../..//div[contains(@class, 'css-iz33ar')]//input)[1]"));
+						ClearAndEnterValue(e, Quantity);
+					}
+					
+					public void ItemsMaterialEditUnitCost(String Cost) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Material']/../..//div[contains(@class, 'css-iz33ar')]//input)[2]"));
+						ClearAndEnterValue(e, Cost);
+					}
+					
+					public void ItemsMaterialEditUnitPrice(String Price) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Material']/../..//div[contains(@class, 'css-iz33ar')]//input)[3]"));
+						ClearAndEnterValue(e, Price);
+					}
+					
+					public void ItemsMaterialEditLIQuantity(String LIQuantity) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Material']/../..//div[contains(@class, 'css-iz33ar')]//input)[4]"));
+						ClearAndEnterValue(e, LIQuantity);
+					}
+					
+					public void ItemsMaterialSaveEdits()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Material']/../..//button[contains(@class, 'css-9289wc')]")).click();
+					}
+					
+					public void ItemsMaterialCancelEdits()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Material']/../..//button[contains(@class, 'css-ttvz9k')]")).click();
+					}					
+				
+				public void ItemAddMachineryButton()
+				{
+					driver.findElement(By.xpath("//div[text()= 'Machinery']/..//button[contains(@class, 'css-e6h54s')]")).click();
+				}
+				// Add Material
+				
+				// Edit & Delete Machinery
+					public void ItemsMachineryDeleteButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Machinery']/../..//button[contains(@class, 'css-vacoer')]")).click();
+					}
+				
+					public void ItemsMachineryEditButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Machinery']/../..//button[contains(@class, 'css-1rh62m4')]"));
+					}
+				
+					public void ItemsMachineryEditQuantitiy(String Quantity) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Machinery']/../..//div[contains(@class, 'css-iz33ar')]//input)[1]"));
+						ClearAndEnterValue(e, Quantity);
+					}
+					
+					public void ItemsMachineryEditUnitCost(String Cost) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Machinery']/../..//div[contains(@class, 'css-iz33ar')]//input)[2]"));
+						ClearAndEnterValue(e, Cost);
+					}
+					
+					public void ItemsMachineryEditUnitPrice(String Price) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Machinery']/../..//div[contains(@class, 'css-iz33ar')]//input)[3]"));
+						ClearAndEnterValue(e, Price);
+					}
+					
+					public void ItemsMachineryEditLIQuantity(String LIQuantity) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Machinery']/../..//div[contains(@class, 'css-iz33ar')]//input)[4]"));
+						ClearAndEnterValue(e, LIQuantity);
+					}
+					
+					public void ItemsMachinerySaveEdits()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Machinery']/../..//button[contains(@class, 'css-9289wc')]")).click();
+					}
+					
+					public void ItemsMachineryCancelEdits()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Machinery']/../..//button[contains(@class, 'css-ttvz9k')]")).click();
+					}
+				
+				public void ItemAddLabourButton()
+				{
+					driver.findElement(By.xpath("//div[text()= 'Labour']/..//button[contains(@class, 'css-e6h54s')]")).click();
+				}
+				// Add Material
+				
+				// Edit & Delete Labor
+					public void ItemsLabourDeleteButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Labour']/../..//button[contains(@class, 'css-vacoer')]")).click();
+					}
+					
+					public void ItemsLabourEditButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Labour']/../..//button[contains(@class, 'css-1rh62m4')]"));
+					}
+				
+					public void ItemsLabourEditQuantitiy(String Quantity) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Labour']/../..//div[contains(@class, 'css-iz33ar')]//input)[1]"));
+						ClearAndEnterValue(e, Quantity);
+					}
+					
+					public void ItemsLabourEditUnitCost(String Cost) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Labour']/../..//div[contains(@class, 'css-iz33ar')]//input)[2]"));
+						ClearAndEnterValue(e, Cost);
+					}
+					
+					public void ItemsLabourEditUnitPrice(String Price) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Labour']/../..//div[contains(@class, 'css-iz33ar')]//input)[3]"));
+						ClearAndEnterValue(e, Price);
+					}
+					
+					public void ItemsLabourEditLIQuantity(String LIQuantity) throws InterruptedException
+					{
+						WebElement e= driver.findElement(By.xpath("(//div[text()= 'Labour']/../..//div[contains(@class, 'css-iz33ar')]//input)[4]"));
+						ClearAndEnterValue(e, LIQuantity);
+					}
+					
+					public void ItemsLabourSaveEdits()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Labour']/../..//button[contains(@class, 'css-9289wc')]")).click();
+					}
+					
+					public void ItemsLabourCancelEdits()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Labour']/../..//button[contains(@class, 'css-ttvz9k')]")).click();
+					}
+			
+			
+	// Item Menu
+		public void ClickItemMoreOptionsButton()
+		{
+			driver.findElement(By.xpath("//button[contains(@class, 'css-1yj6qc0')]")).click();
+		}
+		
+		// Create Job
+		
+		// Copy Line Item
+			public void CopyLineItem()
+			{
+				driver.findElement(By.xpath("//li[text()= 'Copy Line Item']")).click();;
+			}
+			
+			public void CopyLineItemName(String Name) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//input[@name= 'name']"));
+				ClearAndEnterValue(e, Name);
+			}
+			
+			public void SelectCopyTo(String CopyTo)
+			{
+				driver.findElement(By.xpath("//input[@name= 'copyTo']/..//input")).click();
+				SelectDropdownValue(CopyTo);
+			}
+			
+			public void CopyLineItemAssetsCheckbox()
+			{
+				driver.findElement(By.xpath("//input[@id= 'copyAssets']")).click();
+			}
+			
+			public void CopyLineItemButton()
+			{
+				driver.findElement(By.xpath("//button[text()= 'Copy Line Item']")).click();
+			}
+		
+		// Delete Line Item
+		
+		// Role Up Into line 2
+		
+	// Notes Tab
+		public void NotesTab()
+		{
+			driver.findElement(By.xpath("//button[text()= 'Notes']")).click();
+		}
+		// Add Notes
+			public void AddNewNotesButton()
+			{
+				driver.findElement(By.xpath("//button[text()= 'Add New Note']")).click();
+			}
+			
+			public void EnterNotesText(String Notes) throws InterruptedException
+			{
+				WebElement e= driver.findElement(By.xpath("//div[@class= 'ql-editor ql-blank']"));
+				ClearAndEnterValue(e, Notes);
+			}
+			
+			public void SelectNotesType(String Type)
+			{
+				driver.findElement(By.xpath("")).click();
+				SelectDropdownValue(Type);
+			}
+		
+	// History Tab
+		public void HistoryTab()
+		{
+			
+		}
 }
 
 

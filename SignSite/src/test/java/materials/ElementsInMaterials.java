@@ -121,69 +121,43 @@ public class ElementsInMaterials extends Initialstep
     public void SelectMaterialCategory(String Category)
     {
     	driver.findElement(By.xpath("//label[text()= 'Category']/following-sibling::div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[text()= '"+ Category +"' and @role= 'option']")).click();
-    	}
-    	catch (Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the provided category is not exist, first category is selected from dropdown");
-    	}
+    	SelectDropdownValue(Category);
     }
     
     public void EnterMaterialName(String Name) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'name']"));
-    	e.click();
-		e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Name);
+    	ClearAndEnterValue(e, Name);
     }
     
     public void SelectUnit (String unit)
     {
     	driver.findElement(By.xpath("//label[text()= 'Unit']/following-sibling::div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[text()= '"+ unit +"' and @role= 'option']")).click();
-    	}
-    	catch (Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the provided category is not exist, first category is selected from dropdown");
-    	}
+    	SelectDropdownValue(unit);
     }
     
-    public void EnterCost(String cost) 
+    public void EnterCost(String cost) throws InterruptedException 
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'cost']"));
-    	e.click();
-		e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(cost);
+    	ClearAndEnterValue(e, cost);
     }
     
-    public void EnterMarkup(String Markup) 
+    public void EnterMarkup(String Markup) throws InterruptedException 
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'markup']"));
-    	e.click();
-		e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Markup);
+    	ClearAndEnterValue(e, Markup);
     }
     
-    public void EnterDescription (String Description)
+    public void EnterDescription (String Description) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'description']"));
-    	e.click();
-		e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Description);
+    	ClearAndEnterValue(e, Description);
     }
     
-    public void EnterPODescription (String PODescription)
+    public void EnterPODescription (String PODescription) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'po_description']"));
-    	e.click();
-		e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(PODescription);
+    	ClearAndEnterValue(e, PODescription);
     }
     
     public void PerLIUnit()

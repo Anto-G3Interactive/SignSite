@@ -1,6 +1,18 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="FullSuite"> <!-- mvn clean test --> <!-- This to test all -->
   
+  <!-- Smoke Testing -->
+  <test name="SmokeTesting"> <!-- mvn -Dtest=smoketesting.* test --> <!-- This to test this package -->
+    <classes>
+      <class name="smoketesting.AddProdcutandItsDetails"/> <!-- mvn -Dtest=smoketesting.AddProdcutandItsDetails test --> <!-- This to test this class -->
+      <class name="smoketesting.AddRolesandUsers"/>
+      <class name="smoketesting.AddJobs"/>
+    </classes>
+  </test>
+  
+  
+  
+  
   <!-- Category Package Test Cases -->
   <test name="CategoryTests"> <!-- mvn -Dtest=category.* test --> <!-- This to test this package -->
     <classes>
