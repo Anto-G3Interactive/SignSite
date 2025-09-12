@@ -80,9 +80,9 @@ public class AddProducts extends Initialstep
 		EIP.UploadProductImage(ProductImage);
 		EIP.SaveButton();
 		Thread.sleep(1500);
-		if(EIP.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIP.ConfirmationMessage().toLowerCase().contains("success"))
 		{
-			testcase.log(PASS, "Product added and the '"+ EIP.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "Product added and the '"+ EIP.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "Product Added");
 		}
 		else
@@ -98,7 +98,7 @@ public class AddProducts extends Initialstep
 		
 		EIP.EnableorDisableBulkDiscount("Enable");
 		
-		if(EIP.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIP.ConfirmationMessage().toLowerCase().contains("success"))
 		{
 			testcase.log(PASS, "Bulk Discount enabled");
 			takescreenshot(driver, "Bulk Discount enabled");
@@ -133,7 +133,7 @@ public class AddProducts extends Initialstep
 		EIP.SelectMaterial(NewMaterialName);
 		EIP.SaveMateial();
 		
-		if(EIP.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIP.ConfirmationMessage().toLowerCase().contains("success"))
 		{
 			testcase.log(PASS, "Material added to the product");
 			takescreenshot(driver, "Material added for product");
@@ -152,7 +152,7 @@ public class AddProducts extends Initialstep
 		EIP.SelectMachinery(NewMachineryName);
 		EIP.SaveMachinery();
 		
-		if(EIP.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIP.ConfirmationMessage().toLowerCase().contains("success"))
 		{
 			testcase.log(PASS, "Machinery added to the product");
 			takescreenshot(driver, "Machinery added for the product");
@@ -171,7 +171,7 @@ public class AddProducts extends Initialstep
 		EIP.SelectLabour(NewLabourName);
 		EIP.SaveButton();
 		
-		if(EIP.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIP.ConfirmationMessage().toLowerCase().contains("success"))
 		{
 			testcase.log(PASS, "Labour added to the product");
 			takescreenshot(driver, "Labour added for the product");

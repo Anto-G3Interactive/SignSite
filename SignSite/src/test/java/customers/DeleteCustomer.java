@@ -51,17 +51,17 @@ public class DeleteCustomer extends Initialstep
 		EIC.EnterSearchOnlineAndChooseAddress(SearchOnline);
 		
 		Thread.sleep(1500);
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		
-		if (EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+		if (EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 		{
-			testcase.log(PASS, "A New customer is added successfully and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(PASS, "A New customer is added successfully and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 			Thread.sleep(1000);
 			takescreenshot(driver, "New Customer");
 		}
 		else
 		{
-			testcase.log(FAIL, "Not able to add a New Customer. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(FAIL, "Not able to add a New Customer. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 			takescreenshot(driver, "Not able to add a New Customer");
 		}
 		Thread.sleep(1500);
@@ -72,7 +72,7 @@ public class DeleteCustomer extends Initialstep
 	{
 		EIC.SearchField(BusinessName);
 		Thread.sleep(2000);
-		String SucessMessage= EIC.DeleteActionWithSuccessMessage();
+		String SucessMessage= EIC.DeleteActionWithReturnOfSuccessMessage();
 		Thread.sleep(1500);
 		if(SucessMessage.toLowerCase().contains("success"))
 		{

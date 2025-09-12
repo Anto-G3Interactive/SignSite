@@ -40,9 +40,9 @@ public class AddTags extends Initialstep
 		
 		EIC.SaveTagsButton();
 		Thread.sleep(1500);
-		if(EIC.ConfirmationAlert().contains("Tags updated"))
+		if(EIC.ConfirmationMessage().contains("Tags updated"))
 		{
-			testcase.log(PASS, "Tag added to the customer and the '"+ EIC.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "Tag added to the customer and the '"+ EIC.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "Tag Added");
 		}
 		else

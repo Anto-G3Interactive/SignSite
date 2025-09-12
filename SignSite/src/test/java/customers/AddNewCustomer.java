@@ -77,7 +77,7 @@ public class AddNewCustomer extends Initialstep
 		EIC.EnterContactName(ContactName);
 		EIC.EnterContactEmail(ContactEmail);
 		EIC.EnterContactPhone(ContactPhone);
-		EIC.EnableLoginCheckbox();
+		EIC.ClickOnLoginCheckbox("Enable");
 		EIC.SelectAddressType(AddressType);
 		EIC.EnterStreetAddress(StreetAddress);
 		EIC.EnterUnitNumber(UnitNumber);
@@ -100,17 +100,17 @@ public class AddNewCustomer extends Initialstep
 	public void SaveCustomer() throws IOException, InterruptedException
 	{
 		testcase= extentReport.createTest("Save the customer Detail");
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		Thread.sleep(1000);
 		
-		if (EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+		if (EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 		{
-			testcase.log(PASS, "A New customer is added successfully and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(PASS, "A New customer is added successfully and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 			takescreenshot(driver, "New Customer");
 		}
 		else
 		{
-			testcase.log(FAIL, "Not able to add a New Customer. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(FAIL, "Not able to add a New Customer. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 			takescreenshot(driver, "Not able to add a New Customer");
 		}
 	}

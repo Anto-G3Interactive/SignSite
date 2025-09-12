@@ -22,7 +22,7 @@ public class ValidationCheck extends Initialstep
 		
 		EIC.CustomerMenuButton();
 		EIC.AddNewCustomerButton();
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		Thread.sleep(1500);
 		
 		if(driver.findElement(By.xpath("//p[text()= 'Business name is required']")).isDisplayed()&&
@@ -73,7 +73,7 @@ public class ValidationCheck extends Initialstep
 		EIC.EnterContactPhone(ContactPhone);
 		EIC.SelectAddressType(AddressType);
 		EIC.EnterSearchOnlineAndChooseAddress(SearchOnline);
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		Thread.sleep(1500);
 		
 		if ( driver.findElement(By.xpath("//p[text()= 'Invalid email format']")).isDisplayed() &&
@@ -122,7 +122,7 @@ public class ValidationCheck extends Initialstep
 		EIC.SelectCountry(Country);
 		EIC.SelectState(State);
 		EIC.EnterPostcode(PostCode);
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		Thread.sleep(1500);
 		
 		
@@ -165,12 +165,12 @@ public class ValidationCheck extends Initialstep
 		EIC.EnterContactPhone(ContactPhone);
 		EIC.SelectAddressType(AddressType);
 		EIC.EnterSearchOnlineAndChooseAddress(SearchOnline);
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		Thread.sleep(1500);
 				
-		if (EIC.ConfirmationAlert().toLowerCase().contains("already been taken"))
+		if (EIC.ConfirmationMessage().toLowerCase().contains("already been taken"))
 		{
-			testcase.log(PASS, "The Business Name not accepting duplictes and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(PASS, "The Business Name not accepting duplictes and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 			takescreenshot(driver, "Not accepting duplicate business name");
 		}
 		else

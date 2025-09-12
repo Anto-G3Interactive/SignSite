@@ -8,7 +8,7 @@ import basepack.Initialstep;
 
 public class SearchFilterandPagination extends Initialstep 
 {
-    ElementsInMaterials EIM;
+    ElementsInMaterialsPage EIM;
 
     String SearchValue= "FriMay";
     String RowsPerPage= "10";
@@ -23,7 +23,7 @@ public class SearchFilterandPagination extends Initialstep
         EIM.ProductDropdownMenu();
         EIM.MaterialMenuButton();
         Thread.sleep(1500);
-        EIM.SearchField().sendKeys(SearchValue);
+        EIM.SearchField(SearchValue);
         EIM.SelectCategory();
         EIM.SelectStatus();
         
@@ -42,7 +42,7 @@ public class SearchFilterandPagination extends Initialstep
     @Test (priority= 1)
     public void Pagination() throws InterruptedException, IOException 
     {
-    	EIM = new ElementsInMaterials(driver, testcase);
+    	EIM = new ElementsInMaterialsPage(driver, testcase);
     	testcase= extentReport.createTest("Verify the pagination functionality");
     	driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     	

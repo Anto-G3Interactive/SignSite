@@ -1,17 +1,22 @@
 package customers;
 
+import java.io.IOException;
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.aventstack.extentreports.ExtentTest;
 import basepack.Initialstep;
 
 public class ElementsInCustomerPage extends Initialstep
 {
 	
-	ElementsInCustomerPage(WebDriver driver, ExtentTest testcase)
+	public ElementsInCustomerPage(WebDriver driver, ExtentTest testcase)
 	{
 		this.driver= driver;
 		this.testcase= testcase;
@@ -26,10 +31,7 @@ public class ElementsInCustomerPage extends Initialstep
 	public void SearchField(String SearchValue) throws InterruptedException
     {
         WebElement e= driver.findElement(By.xpath("//input[@name='#0']"));
-        e.click();
-        e.sendKeys(Keys.CONTROL, "a");
-        Thread.sleep(1000);
-        e.sendKeys(SearchValue);
+        ClearAndEnterValue(e, SearchValue);
     }
     
     public void SelectStatusOfFirstRow()
@@ -39,21 +41,43 @@ public class ElementsInCustomerPage extends Initialstep
         driver.findElement(By.xpath("//li[@role= 'option' and text()= '"+ status +"']")).click();
     }
 	
-    public void EditButton()
+    public void EditButton(int index)
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[1]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class,'css-1ia3zz3')])["+ index +"]")).click();
     }
     
-    public String DeleteActionWithSuccessMessage() throws InterruptedException
+    public String DeleteActionWithReturnOfSuccessMessage() throws InterruptedException
     {
-    	WebElement Delete= driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[2]"));
+    	WebElement Delete= driver.findElement(By.xpath("//button[contains(@class, 'css-vacoer')]"));
     	JavascriptExecutor js= (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].scrollLeft = arguments[0].scrollWidth", Delete);
 		Thread.sleep(1000);
 		Delete.click();
     	Thread.sleep(1000);
     	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
-    	return driver.findElement(By.xpath("//div[text()= 'Successfully deleted.']")).getText();
+    	return driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+    }
+    
+    public void DeleteButton(int index) throws InterruptedException
+    {
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1ffkwrf')])["+ index +"]")).click();
+    	Thread.sleep(1500);
+    	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
+    }
+    
+	public void DeletedMessageAndClickOnOkButton(String Data) throws IOException
+    {
+   	   	String s= driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+	   	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
+	    if(s.toLowerCase().contains("success"))
+	    {
+	    	testcase.log(PASS, Data +" deleted and the '"+ s +"' message is displayed");
+    	}
+    	else
+    	{
+    		testcase.log(FAIL, "Failed To Delete");
+    	}
+		driver.findElement(By.xpath("//button[text()= 'OK']")).click();
     }
     
     public void OKButtonAfterDelete()
@@ -69,8 +93,10 @@ public class ElementsInCustomerPage extends Initialstep
     	testcase.log(INFO, "Status updated to: "+ e.getText());
     }
     
-    public String ConfirmationAlert()
+    public String ConfirmationMessage() throws InterruptedException
     {
+    	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@role= 'status']")));
     	return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
     }
     
@@ -145,20 +171,16 @@ public class ElementsInCustomerPage extends Initialstep
     	driver.findElement(By.xpath("//button[@id= 'simple-tab-0']")).click();
     }
     
-    public void EnterBusinessName(String BName)
+    public void EnterBusinessName(String BName) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'business_name']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(BName);
+    	ClearAndEnterValue(e, BName);
     }
     
-    public void EnterTradingName(String TName)
+    public void EnterTradingName(String TName) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'trading_name']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(TName);
+    	ClearAndEnterValue(e, TName);
     }
     
     public void DoNotSupplyToggleButton(String EnableorDisable)
@@ -187,211 +209,136 @@ public class ElementsInCustomerPage extends Initialstep
     	}
     }
         
-    // Contact Details
+  // Contact Details
     public void SelectContactType(String ContactType)
     {
     	driver.findElement(By.xpath("//label[text()= 'Contact Type']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ ContactType +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given contact type is not exist, selected first value from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, ContactType);
     }
     
-    public void EnterContactName(String CName)
+    public void EnterContactName(String CName) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//label[text()= 'Contact Name']/..//input"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(CName);
+    	ClearAndEnterValue(e, CName);
     }
     
-    public void EnterContactEmail(String CEmail)
+    public void EnterContactEmail(String CEmail) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@type='email']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(CEmail);
+    	ClearAndEnterValue(e, CEmail);
     }
     
-    public void EnableLoginCheckbox()
+    public void ClickOnLoginCheckbox(String EnableOrDisable)
     {
-    	driver.findElement(By.xpath("//label[text()= 'Contact Email']/..//input[@type='checkbox']")).click();
+    	WebElement e= driver.findElement(By.xpath("//label[text()= 'Login?']/..//input"));
+    	if (EnableOrDisable.toLowerCase().contains("disable"))
+    	{
+    		if(e.isSelected()) {e.click();}
+    	}
+    	else if (!e.isSelected())
+    	{
+    		e.click();
+    	}
     }
     
-    public void EnterContactPhone(String Number)
+    public void EnterContactPhone(String Number) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[contains (@id, 'phone')]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Number);
+    	ClearAndEnterValue(e, Number);
     }
     
-    // Address Details
+  // Address Details
     public void SelectAddressType(String AddressType)
     {
     	driver.findElement(By.xpath("//label[text()= 'Address Type']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and contains(text(), '"+ AddressType +"')]")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given address type is not exist, selected first value from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, AddressType);
     }
     
     public void EnterSearchOnlineAndChooseAddress(String SearchOnline) throws InterruptedException
     {
-    	driver.findElement(By.xpath("//input[@id= 'google-autocomplete']")).sendKeys(SearchOnline);
+    	WebElement e= driver.findElement(By.xpath("//input[@id= 'google-autocomplete']"));
+    	ClearAndEnterValue(e, SearchOnline);
     	Thread.sleep(1500);
     	driver.findElement(By.xpath("//div[@class= 'pac-item']")).click();
     }
     
-    public void EnterStreetAddress(String SAddress)
+    public void EnterStreetAddress(String SAddress) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@placeholder='Enter your street address']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(SAddress);
+    	ClearAndEnterValue(e, SAddress);
     }
     
-    public void EnterUnitNumber(String UNumber)
+    public void EnterUnitNumber(String UNumber) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@placeholder='Enter your unit number']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(UNumber);
+    	ClearAndEnterValue(e, UNumber);
     }
     
-    public void EnterSuburb(String Suburb)
+    public void EnterSuburb(String Suburb) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@placeholder='Enter your suburb']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Suburb);
+    	ClearAndEnterValue(e, Suburb);
     }
     
     public void SelectCountry(String Country)
     {
     	driver.findElement(By.xpath("//label[text()= 'Country']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Country +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option'and text()= 'Australia']")).click();
-    		testcase.log(INFO, "Since the given country is not exist, Australia is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, Country);
     }
     
     public void SelectState(String State)
     {
     	driver.findElement(By.xpath("//label[text()= 'State']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ State +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given state is not exist, first value is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, State);
     }
     
-    public void EnterPostcode(String Postcode)
+    public void EnterPostcode(String Postcode) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@placeholder= 'Enter your postcode']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Postcode);
+    	ClearAndEnterValue(e, Postcode);
     }
     
-    // Other Details
+  // Other Details
     public void SelectTerms(String Terms)
     {
     	driver.findElement(By.xpath("//label[text()= 'Terms']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Terms +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given Terms is not exist, first value is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, Terms);
     }
     
     public void SelectIndustry(String Industry)
     {
     	driver.findElement(By.xpath("//label[text()= 'Industry']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Industry +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given Industry is not exist, first value is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, Industry);
     }
     
     public void SelectTax(String Tax)
     {
     	driver.findElement(By.xpath("//label[text()= 'Tax']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Tax +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given Tax is not exist, first value is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, Tax);
     }
     
     public void SelectSalesRep(String SalesRep)
     {
     	driver.findElement(By.xpath("//label[text()= 'Sales Rep']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ SalesRep +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given Sales Rep is not exist, first value is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, SalesRep);
     }
     
-    public void EnterABN(String ABN)
+    public void EnterABN(String ABN) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@placeholder= 'Enter your ABN']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(ABN);
+    	ClearAndEnterValue(e, ABN);
     }
     
-    public void EnterNotes(String Notes)
+    public void EnterNotes(String Notes) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//textarea[@id= 'notes']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Notes);
+    	ClearAndEnterValue(e, Notes);
     }
     
-    public void EnterSpecialNotes(String SNotes)
+    public void EnterSpecialNotes(String SNotes) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//textarea[@id= 'special_notes']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(SNotes);
+    	ClearAndEnterValue(e, SNotes);
     }
     
     public void ClickOnCancelButton(String Index)
@@ -399,9 +346,18 @@ public class ElementsInCustomerPage extends Initialstep
     	driver.findElement(By.xpath("(//button[text()= 'Cancel'])["+ Index +"]")).click();
     }
     
-    public void ClickOnSaveButton(String Index) throws InterruptedException
+    public void SaveButton() throws InterruptedException
     {
-    	WebElement Save= driver.findElement(By.xpath("(//button[text()= 'Save'])["+ Index +"]"));
+    	WebElement Save= driver.findElement(By.xpath("//button[text()= 'Save']"));
+    	JavascriptExecutor js= (JavascriptExecutor)driver;
+    	js.executeScript("arguments[0].scrollIntoView(true);", Save);
+    	Thread.sleep(1000);
+    	Save.click();
+    }
+    
+    public void ClickOnPopUpSaveButton() throws InterruptedException
+    {
+    	WebElement Save= driver.findElement(By.xpath("(//button[text()= 'Save'])[2]"));
     	JavascriptExecutor js= (JavascriptExecutor)driver;
     	js.executeScript("arguments[0].scrollIntoView(true);", Save);
     	Thread.sleep(1000);
@@ -481,12 +437,10 @@ public class ElementsInCustomerPage extends Initialstep
     	}
     }
     
-    public void EnterDiscount(String Discount)
+    public void EnterDiscount(String Discount) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'discount']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Discount);
+    	ClearAndEnterValue(e, Discount);
     }
     
 // Add Tags    

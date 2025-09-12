@@ -2,7 +2,6 @@ package quotes;
 
 import java.io.IOException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.aventstack.extentreports.ExtentTest;
@@ -10,7 +9,7 @@ import basepack.Initialstep;
 
 public class ElementsInQuotesPage extends Initialstep
 {
-	ElementsInQuotesPage(WebDriver driver, ExtentTest testcase)
+	public ElementsInQuotesPage(WebDriver driver, ExtentTest testcase)
 	{
 		this.driver= driver;
 		this.testcase= testcase;
@@ -31,50 +30,54 @@ public class ElementsInQuotesPage extends Initialstep
 	public void SearchField(String SearchValue) throws InterruptedException
     {
         WebElement e= driver.findElement(By.xpath("//input[@name='#0']"));
-        e.click();
-        e.sendKeys(Keys.CONTROL, "a");
-        Thread.sleep(1000);
-        e.sendKeys(SearchValue);
+        ClearAndEnterValue(e, SearchValue);
     }
     
     public void SelectStatus()
     {
     	driver.findElement(By.xpath("//input[@placeholder= 'Select Status']")).click();
-        String status= driver.findElement(By.xpath("(//div[@data-field= 'status'])[2]//button")).getText();
+        String status= driver.findElement(By.xpath("(//div[@data-field= 'quote_status'])[2]")).getText();
         driver.findElement(By.xpath("//li[@role= 'option' and text()= '"+ status +"']")).click();
     }
 	
-    public void EditButton()
+    public void EditButton(int Index)
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[1]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1ia3zz3')])["+ Index +"]")).click();
     }
     
-    public void DeleteButton() throws InterruptedException
+    public void DeleteButton(int index) throws InterruptedException
     {
-    	driver.findElement(By.xpath("//button[contains(@class, 'css-1owy3pf')]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-vacoer')])["+ index +"]")).click();
     	Thread.sleep(1500);
     	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
     }
     
-    public String DeletedMessageAndClickOnOkButton() throws IOException
+	public void DeletedMessageAndClickOnOkButton(String Data) throws IOException
     {
-    	String s= driver.findElement(By.xpath("//div[text()= 'Successfully deleted.']")).getText();
-    	takescreenshot(driver, "Deleted Successfully");
-    	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
-    	return s;
+   	   	String s= driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+	   	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
+	    if(s.toLowerCase().contains("success"))
+	    {
+	    	testcase.log(PASS, Data +" deleted and the '"+ s +"' message is displayed");
+    	}
+    	else
+    	{
+    		testcase.log(FAIL, "Failed To Delete");
+    	}
+		driver.findElement(By.xpath("//button[text()= 'OK']")).click();
     }
     
-    public String ConfirmationAlerts()
-    {
-    	return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
-    }
+    public String ConfirmationMessage()
+	{
+		return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
+	}
     
-    public WebElement UsersPageHeading()
+    public WebElement QuotesPageHeading()
     {
     	return driver.findElement(By.xpath("//h6[text()= 'Quotes']"));
     }
         
-    // Pagination
+  // Pagination
     public void RowsPerPage(String RPP)
     {
     	driver.findElement(By.xpath("//div[@aria-haspopup='listbox' and not(contains(@id, 'mui-component-select-company_id'))]")).click();
@@ -108,7 +111,7 @@ public class ElementsInQuotesPage extends Initialstep
     	}
     }
     
-    // Column Chooser
+  // Column Chooser
     public void ColumnChooserMenu(String HideOrShow)
     {
     	driver.findElement(By.xpath("//button[contains(@class, 'css-mfslm7')]")).click();
@@ -124,15 +127,15 @@ public class ElementsInQuotesPage extends Initialstep
     	}
     }
     
-    // Data from first Row
+  // Data from first Row
     public String MainColumnFirstRowData()
     {
     	return driver.findElement(By.xpath("(//div[@data-field= 'quote_name'])[2]")).getText();
     }
     
-    public void QuoteNumberButton()
+    public void QuoteNumberButton(int Index)
     {
-    	driver.findElement(By.xpath("//button[contains(@class, 'css-1c69r7k')]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1c69r7k')])["+ Index +"]")).click();
     }
     
 // Add New Quotes (Minimal Form)
@@ -143,14 +146,14 @@ public class ElementsInQuotesPage extends Initialstep
     
     public void SelectCustomer(String Name)
     {
-    	driver.findElement(By.xpath("//label[contains(text(), 'Customer')]/..//input")).click();
-    	SelectDropdownValue(Name);
+    	driver.findElement(By.xpath("//p[contains(text(), 'Customer')]/..//input")).click();
+    	SelectDropdownValue(driver, testcase, Name);
     }
     
     public void SelectQuoteStatus(String status)
     {
-    	driver.findElement(By.xpath("//label[text()= 'Status']/..//input")).click();
-    	SelectDropdownValue(status);
+    	driver.findElement(By.xpath("//p[text()= 'Status ']/..//input")).click();
+    	SelectDropdownValue(driver, testcase, status);
     }
     
     public void SelectQuoteDate(String Date)
@@ -165,8 +168,8 @@ public class ElementsInQuotesPage extends Initialstep
     
     public void SelectTax(String tax)
     {
-    	driver.findElement(By.xpath("//label[text()= 'Tax']/..//input")).click();
-    	SelectDropdownValue(tax);
+    	driver.findElement(By.xpath("//p[contains(text(), 'Tax')]/..//input")).click();
+    	SelectDropdownValue(driver, testcase, tax);
     }
     
     public void ShowAllFieldsButton()
@@ -183,84 +186,99 @@ public class ElementsInQuotesPage extends Initialstep
     
     public void AddNewCustomersButton()
     {
-    	driver.findElement(By.xpath("//label[text()= 'Customers']/../..//button")).click();
+    	driver.findElement(By.xpath("//p[text()= 'Customer ']/..//button[contains(@class, 'css-wy6pze')]")).click();
     }
     
     public void EnterQuoteTitle(String QTitle) throws InterruptedException
     {
-    	 WebElement e= driver.findElement(By.xpath("//input[@id= 'quote_name']"));
+    	 WebElement e= driver.findElement(By.xpath("//input[@name= 'title']"));
     	 ClearAndEnterValue(e, QTitle);
     }
     
     // Contacts  
 	    public void SelectPrimaryContact(String Name)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Primary Contact')]/..//input")).click();
-	    	SelectDropdownValue(Name);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Primary Contact')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Name);
 	    }
 	    
 	    public void AddNewPrimaryContactButton()
 	    {
-	    	driver.findElement(By.xpath("//label[text()= 'Primary Contact']/../..//button")).click();
+	    	driver.findElement(By.xpath("//p[text()= 'Primary Contact']/..//button[contains(@class, 'css-wy6pze')]")).click();
 	    }
 	    
 	    public void SelectInvoiceContact(String Name)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Invoice Contact')]/..//input")).click();
-	    	SelectDropdownValue(Name);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Invoice Contact')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Name);
 	    }
 	    
 	    public void AddNewInvoiceContactButton()
 	    {
-	    	driver.findElement(By.xpath("//label[text()= 'Invoice Contact']/../..//button")).click();
+	    	driver.findElement(By.xpath("//p[text()= 'Invoice Contact']/..//button[contains(@class, 'css-wy6pze')]")).click();
 	    }
     
     // Address & Shipping   
 	    public void SelectBillingAddress(String Address)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Billing Address')]/..//input")).click();
-	    	SelectDropdownValue(Address);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Billing Address')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Address);
+	    }
+	    
+	    public void AddNewBillingAddressButton()
+	    {
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Billing Address')]/..//button[contains(@class, 'css-wy6pze')]")).click();
 	    }
 	    
 	    public void SelectShippingAddress(String Address)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Shipping Address')]/..//input")).click();
-	    	SelectDropdownValue(Address);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Shipping Address')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Address);
+	    }
+	    
+	    public void AddNewShippingAddressButton()
+	    {
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Shipping Address')]/..//button[contains(@class, 'css-wy6pze')]")).click();
 	    }
 	    
 	    public void SelectInstallAddress(String Address)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Install Address')]/..//input")).click();
-	    	SelectDropdownValue(Address);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Install Address')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Address);
+	    }
+	    
+	    public void AddNewInstallAddressButton()
+	    {
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Install Address')]/..//button[contains(@class, 'css-wy6pze')]")).click();
 	    }
 	    
 	    public void EnterBillingAttentionTo(String To) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//input[@id='billing_attend_to']"));
+	    	WebElement e= driver.findElement(By.xpath("//input[@name='billing_attend_to']"));
 	    	ClearAndEnterValue(e, To);
 	    }
 	    
 	    public void EnterShippingAttentionTo(String To) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//input[@id='shipping_attend_to']"));
+	    	WebElement e= driver.findElement(By.xpath("//input[@name='shipping_attend_to']"));
 	    	ClearAndEnterValue(e, To);
 	    }
 	    
 	    public void EnterInstallAttentionTo(String To) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//input[@id='install_attend_to']"));
+	    	WebElement e= driver.findElement(By.xpath("//input[@name='install_attend_to']"));
 	    	ClearAndEnterValue(e, To);
 	    }
 	    
 	    public void SelectShippingMethod(String Method)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Shipping Method')]/..//input")).click();
-	    	SelectDropdownValue(Method);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Shipping Method')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Method);
 	    }
 	    
 	    public void AddNewShippingMethodButton()
 	    {
-	    	driver.findElement(By.xpath("//label[text()= 'Shipping Method']/../..//button")).click();
+	    	driver.findElement(By.xpath("//p[text()= 'Shipping Method']/..//button[contains(@class, 'css-wy6pze')]")).click();
 	    }
     
     // Dates    
@@ -269,9 +287,14 @@ public class ElementsInQuotesPage extends Initialstep
 	    	driver.findElement(By.xpath("//input[@name='due_date']")).sendKeys(Date);
 	    }
 	    
+	    public void EnterExpiryDate(String Date)
+	    {
+	    	driver.findElement(By.xpath("//input[@name='expiry_date']")).sendKeys(Date);
+	    }
+	    
 	    public void EnterNextContactDate(String Date)
 	    {
-	    	driver.findElement(By.xpath("//input[@name='next_contact_date']")).sendKeys(Date);
+	    	driver.findElement(By.xpath("//input[@name='contact_date']")).sendKeys(Date);
 	    }
 	    
 	    public void EnterShippingDate(String Date)
@@ -281,64 +304,64 @@ public class ElementsInQuotesPage extends Initialstep
 	    
 	    public void EnterInHandDate(String Date)
 	    {
-	    	driver.findElement(By.xpath("//input[@name='shipping_date']")).sendKeys(Date);
+	    	driver.findElement(By.xpath("//input[@name='in_hand_date']")).sendKeys(Date);
 	    }
     
     // Payment & Tax    
 	    public void SelectTerms(String Terms)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Terms')]/..//input")).click();
-	    	SelectDropdownValue(Terms);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Terms')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Terms);
 	    }
 	    
 	    public void EnterDownPaymenPercentage(String Percentage) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//input[@id='downpayment_perc']"));
+	    	WebElement e= driver.findElement(By.xpath("//input[@name='downpayment']"));
 	    	ClearAndEnterValue(e, Percentage);
 	    }
     
     // Team Assignments    
-	    public void SelectSalesRep(String Tax)
+	    public void SelectSalesRep(String SalesRep)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Sales Rep')]/..//input")).click();
-	    	SelectDropdownValue(Tax);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Sales Rep')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, SalesRep);
 	    }
 	    
 	    public void SelectProductionManager(String Manager)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Production Manager')]/..//input")).click();
-	    	SelectDropdownValue(Manager);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Production Manager')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Manager);
 	    }
 	    
 	    public void SelectProjectManager(String Manager)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Project Manager')]/..//input")).click();
-	    	SelectDropdownValue(Manager);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Project Manager')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Manager);
 	    }
 	    
 	    public void SelectDesigner(String Designer)
 	    {
-	    	driver.findElement(By.xpath("//label[contains(text(), 'Designer')]/..//input")).click();
-	    	SelectDropdownValue(Designer);
+	    	driver.findElement(By.xpath("//p[contains(text(), 'Designer')]/..//input")).click();
+	    	SelectDropdownValue(driver, testcase, Designer);
 	    }
     
     // Notes    
 	    public void EnterSpecialInfo(String Info) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//textarea[@id='special_info']"));
+	    	WebElement e= driver.findElement(By.xpath("//textarea[@name='special_info']"));
 	    	ClearAndEnterValue(e, Info);
 	    }
 	    
 	    public void EnterCustomerNote(String Info) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//textarea[@id='customer_note']"));
+	    	WebElement e= driver.findElement(By.xpath("//textarea[@name='customer_note']"));
 	    	ClearAndEnterValue(e, Info);
 	    }
     
     // Other
 	    public void EnterCustomerPO(String CPO) throws InterruptedException
 	    {
-	    	WebElement e= driver.findElement(By.xpath("//input[@id='customer_po']"));
+	    	WebElement e= driver.findElement(By.xpath("//input[@name='customer_po']"));
 	    	ClearAndEnterValue(e, CPO);
 	    }
 	    
@@ -347,9 +370,9 @@ public class ElementsInQuotesPage extends Initialstep
 	    	driver.findElement(By.xpath("//input[@name='customer_po_date']")).sendKeys(Date);
 	    }
 	    
-	    public void SaveandUpdateFirstLineItemButton()
+	    public void SaveandAddorUpdateFirstLineItemButton()
 	    {
-	    	driver.findElement(By.xpath("//button[text()= 'Save & Update First Line Item']")).click();
+	    	driver.findElement(By.xpath("//button[contains(text(), 'Save &')]")).click();
 	    }
 	    
 	    public void CancelButton()
@@ -361,7 +384,7 @@ public class ElementsInQuotesPage extends Initialstep
     
     public void EditQuoteButton()
     {
-    	driver.findElement(By.xpath("//button[text()= 'Edit']")).click();
+    	driver.findElement(By.xpath("//button[contains(@class, 'css-xyc1p3')]")).click();
     }
     
     // Expand Details
@@ -372,7 +395,7 @@ public class ElementsInQuotesPage extends Initialstep
 	    
 		    public void ConfirmSelectionButton()
 		    {
-		    	driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-tzzplu']//button[contains(@class, 'css-mfslm7')]")).click();
+		    	driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-tzzplu']//button[contains(@class, 'css-1rg4rld')]")).click();
 		    }
 		    
 		    public void ClearSelectionButton()
@@ -380,7 +403,7 @@ public class ElementsInQuotesPage extends Initialstep
 		    	driver.findElement(By.xpath("//button[contains(@class, 'css-1o3l9i0')]")).click();
 		    }
 		    
-		    public void ClearOrSelectTheDetails(String Data)
+		    public void ClearOrSelectTheDetailFromDropdown(String Data)
 		    {
 		    	if(Data.equals(""))
 		    	{
@@ -389,7 +412,7 @@ public class ElementsInQuotesPage extends Initialstep
 		    	else
 		    	{
 		    		driver.findElement(By.xpath("//input[contains(@class, 'css-qwdxx6')]")).click();
-			    	SelectDropdownValue(Data);
+			    	SelectDropdownValue(driver, testcase, Data);
 		    	}
 		    	ConfirmSelectionButton();
 		    }
@@ -397,71 +420,71 @@ public class ElementsInQuotesPage extends Initialstep
 		    public void EditandSelectCustomer(String Customer)
 		    {
 		    	driver.findElement(By.xpath("//button[contains(@class, 'css-hdws54')]")).click();
-		    	ClearOrSelectTheDetails(Customer);
+		    	ClearOrSelectTheDetailFromDropdown(Customer);
 		    }
 		    
 		    // Customer	    
 		    	public void EditandSelectPrimaryContact(String PContact)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Primary Contact']//button")).click();
-			    	ClearOrSelectTheDetails(PContact);
+			    	ClearOrSelectTheDetailFromDropdown(PContact);
 			    }
 			    
 			    public void EditandSelectInvoiceContact(String IContact)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Invoice Contact']//button")).click();
-			    	ClearOrSelectTheDetails(IContact);
+			    	ClearOrSelectTheDetailFromDropdown(IContact);
 			    }
 		    
 			// Status		    
 			    public void EditandSelectStatus(String Status)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Status']//button")).click();
-			    	ClearOrSelectTheDetails(Status);
+			    	ClearOrSelectTheDetailFromDropdown(Status);
 			    }
 			
 		    // Team Assignments		    
 			    public void EditandSelectSalesRep(String SRep)
 			    {
-			    	driver.findElement(By.xpath("//div[text()= 'Status']//button")).click();
-			    	ClearOrSelectTheDetails(SRep);
+			    	driver.findElement(By.xpath("//div[text()= 'Sales Rep']//button")).click();
+			    	ClearOrSelectTheDetailFromDropdown(SRep);
 			    }
 			    
 			    public void EditandSelectProductionManager(String ProdManager)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Production Manager']//button")).click();
-			    	ClearOrSelectTheDetails(ProdManager);
+			    	ClearOrSelectTheDetailFromDropdown(ProdManager);
 			    }
 			    
 			    public void EditandSelectProjectManager(String ProjManager)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Project Manager']//button")).click();
-			    	ClearOrSelectTheDetails(ProjManager);
+			    	ClearOrSelectTheDetailFromDropdown(ProjManager);
 			    }
 			    
 			    public void EditandSelectDesigner(String Designer)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Designer']//button")).click();
-			    	ClearOrSelectTheDetails(Designer);
+			    	ClearOrSelectTheDetailFromDropdown(Designer);
 			    }
 			    
 			// Address & Shipping
 			    public void EditandSelectBillingAddress(String Address)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Billing Address']//button")).click();
-			    	ClearOrSelectTheDetails(Address);
+			    	ClearOrSelectTheDetailFromDropdown(Address);
 			    }
 			    
 			    public void EditandSelectShippingAddress(String Address)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Shipping Address']//button")).click();
-			    	ClearOrSelectTheDetails(Address);
+			    	ClearOrSelectTheDetailFromDropdown(Address);
 			    }
 			    
 			    public void EditandSelectInstallAddress(String Address)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Install Address']//button")).click();
-			    	ClearOrSelectTheDetails(Address);
+			    	ClearOrSelectTheDetailFromDropdown(Address);
 			    }
 			    
 			    public void EditandEnterBillingAttentionTo(String To) throws InterruptedException
@@ -491,14 +514,14 @@ public class ElementsInQuotesPage extends Initialstep
 			    public void EditandSelectShippingMethod(String Method)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Shipping Method']//button")).click();
-			    	ClearOrSelectTheDetails(Method);
+			    	ClearOrSelectTheDetailFromDropdown(Method);
 			    }
 			    
 			// Payment & Tax
 			    public void EditandSelectTerms(String Terms)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Terms']//button")).click();
-			    	ClearOrSelectTheDetails(Terms);
+			    	ClearOrSelectTheDetailFromDropdown(Terms);
 			    }
 			    
 			    public void EditandEnterDownpaymentPercentage(String Value, String DollerOrPercentage) throws InterruptedException
@@ -520,7 +543,7 @@ public class ElementsInQuotesPage extends Initialstep
 			    public void EditandSelectTax(String Tax)
 			    {
 			    	driver.findElement(By.xpath("//div[text()= 'Tax']//button")).click();
-			    	ClearOrSelectTheDetails(Tax);
+			    	ClearOrSelectTheDetailFromDropdown(Tax);
 			    }
 			    
 			// Notes
@@ -602,14 +625,14 @@ public class ElementsInQuotesPage extends Initialstep
 		
 			public void ToCustomer(String Customer)
 			{
-				driver.findElement(By.xpath("//div[contains (@id, 'select-customer')]")).click();
-				SelectDropdownValue(Customer);
+				driver.findElement(By.xpath("//input[@placeholder= 'Select your Customer']")).click();
+				SelectDropdownValue(driver, testcase, Customer);
 			}
 			
 			public void CC(String CC)
 			{
-				driver.findElement(By.xpath("//div[contains(@class, 'css-1kmkvia')]")).click();
-				SelectDropdownValue(CC);
+				driver.findElement(By.xpath("//input[@placeholder= 'Select your Cc']")).click();
+				SelectDropdownValue(driver, testcase, CC);
 			}
 			
 			public void ClickOnRequestReadRecipt(String EnableOrDisable)
@@ -626,7 +649,7 @@ public class ElementsInQuotesPage extends Initialstep
 			public void EmailTemplate(String Template)
 			{
 				driver.findElement(By.xpath("//p[text()= 'Email Template']/..//input")).click();
-				SelectDropdownValue(Template);
+				SelectDropdownValue(driver, testcase, Template);
 			}
 			
 			public void Subject(String subject) throws InterruptedException
@@ -652,10 +675,54 @@ public class ElementsInQuotesPage extends Initialstep
 			    }
 			}
 			
-			public void UploadAttachments(String Path)
+			public void ClickOnQuotePDFCheckbox(String EnableOrDisable)
+			{
+				WebElement e= driver.findElement(By.xpath("//p[text()= 'Quote PDF']/../../..//input"));
+				boolean shouldEnable = EnableOrDisable.trim().equalsIgnoreCase("enable");
+
+			    if (e.isSelected() != shouldEnable)
+			    {
+			        e.click();
+			    }
+			}
+			
+			public void ClickOnQuoteNoTotalPDFCheckbox(String EnableOrDisable)
+			{
+				WebElement e= driver.findElement(By.xpath("//p[text()= 'Quote No Total PDF']/../../..//input"));
+				boolean shouldEnable = EnableOrDisable.trim().equalsIgnoreCase("enable");
+
+			    if (e.isSelected() != shouldEnable)
+			    {
+			        e.click();
+			    }
+			}
+			
+			public void ClickOnWorkOrderPDFCheckbox(String EnableOrDisable)
+			{
+				WebElement e= driver.findElement(By.xpath("//p[text()= 'Work Order PDF']/../../..//input"));
+				boolean shouldEnable = EnableOrDisable.trim().equalsIgnoreCase("enable");
+
+			    if (e.isSelected() != shouldEnable)
+			    {
+			        e.click();
+			    }
+			}
+			
+			public void ClickOnDownPaymentInvoicePDFCheckbox(String EnableOrDisable)
+			{
+				WebElement e= driver.findElement(By.xpath("//p[text()= 'Down Payment Invoice PDF']/../../..//input"));
+				boolean shouldEnable = EnableOrDisable.trim().equalsIgnoreCase("enable");
+
+			    if (e.isSelected() != shouldEnable)
+			    {
+			        e.click();
+			    }
+			}
+			
+/**			public void UploadAttachments(String Path)
 			{
 				driver.findElement(By.xpath("//input[@id= 'upload-image']")).sendKeys(Path);
-			}
+			} **/
 			
 			public void SendButton()
 			{
@@ -664,8 +731,100 @@ public class ElementsInQuotesPage extends Initialstep
 			
 			public void CloseButtonInSendAnEmail()
 			{
-				driver.findElement(By.xpath("//button[contains(@class, 'css-1fntcqw')]")).click();
+				driver.findElement(By.xpath("//button[contains(@class, 'css-1sl3a2d')]")).click();
 			}
+			
+	// Quote Menu
+		public void ClickOnThreeDotQuoteMenuButton()
+		{
+			driver.findElement(By.xpath("//button[contains(@class, 'css-1g49wez')]")).click();
+		}
+		
+		// Record Payment
+			public void ClickOnRecordPayment()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'Record Payment')]")).click();
+			}
+		
+		// Convert
+			public void ClickOnConvertToSalesOrder()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'To Sales Order')]")).click();
+			}
+				
+				public void EditTransactionInformationButton()
+				{
+					driver.findElement(By.xpath("//button[contains(text(), 'Close Transaction Information')]")).click();
+				}
+				
+				// Pending
+				
+				public void CloseTransactionInformationButton()
+				{
+					driver.findElement(By.xpath("//button[contains(text(), 'Edit Transaction Information')]")).click();
+				}
+				
+				public void ConvertToSalesOrderButton()
+				{
+					driver.findElement(By.xpath("//button[contains(text(), 'Convert to Sales Order')]")).click();
+				}
+			
+			public void ClickOnConvertToInvoice()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'To Invoice')]")).click();
+			}
+			
+				public void ConvertToInvoiceButton()
+				{
+					driver.findElement(By.xpath("//button[contains(text(), 'Convert to invoice')]")).click();
+				}
+			
+		// Create Copy
+			public void ClickOnCreateCopyButton()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'Create Copy')]")).click();
+			}
+			
+		// Export to PDF
+			public void ClickOnExportQuoteToPDF()
+			{
+				driver.findElement(By.xpath("(//li[contains(text(), 'Quote')])[1]")).click();
+			}
+			
+			public void ClickOnExportToNoTotal()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'No Total')]")).click();
+			}
+			
+			public void ClickOnExportToWorkOrder()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'Work Order')]")).click();
+			}
+			
+			public void ClickOnExportToDownPaymentInvoice()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'Down Payment Invoice')]")).click();
+			}
+			
+		// Export to XLS
+			public void ClickOnExportQuoteToXLS()
+			{
+				driver.findElement(By.xpath("(//li[contains(text(), 'Quote')])[2]")).click();
+			}
+		
+		// Void and Unvoid
+			public void ClickOnVoidButton()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'Void')]")).click();
+			}
+			
+			// Pending
+			
+			public void ClickOnUnvoidButton()
+			{
+				driver.findElement(By.xpath("//li[contains(text(), 'Unvoid')]")).click();
+			}
+			
 		    
 	// Add Items
 		public void AddItemsButton()
@@ -676,12 +835,12 @@ public class ElementsInQuotesPage extends Initialstep
 			public void AddItemSelectProduct(String Product)
 			{
 				driver.findElement(By.xpath("//input[contains(@class, 'css-fvgl9b')]")).click();
-				SelectDropdownValue(Product);
+				SelectDropdownValue(driver, testcase, Product);
 			}
 			
 			public void AddItemViewProductDetails()
 			{
-				driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-fef8xl']")).click();
+				driver.findElement(By.xpath("//button[@aria-label= 'View the Selected Product']")).click();
 			}
 			
 			public void AddItemEditItemNameAddItem(String Name) throws InterruptedException
@@ -1025,7 +1184,7 @@ public class ElementsInQuotesPage extends Initialstep
 			public void SelectCopyTo(String CopyTo)
 			{
 				driver.findElement(By.xpath("//input[@name= 'copyTo']/..//input")).click();
-				SelectDropdownValue(CopyTo);
+				SelectDropdownValue(driver, testcase, CopyTo);
 			}
 			
 			public void CopyLineItemAssetsCheckbox()
@@ -1062,7 +1221,7 @@ public class ElementsInQuotesPage extends Initialstep
 			public void SelectNotesType(String Type)
 			{
 				driver.findElement(By.xpath("")).click();
-				SelectDropdownValue(Type);
+				SelectDropdownValue(driver, testcase, Type);
 			}
 		
 	// History Tab

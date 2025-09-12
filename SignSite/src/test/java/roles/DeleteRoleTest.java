@@ -24,7 +24,7 @@ public class DeleteRoleTest extends Initialstep
     	EIR.RolesMenuButton();
     	EIR.SearchField(ToBeDeleted);
     	Thread.sleep(1500);
-    	EIR.DeleteButton();
+    	EIR.DeleteButton(1);
     	Thread.sleep(1000);
     	
     	if(EIR.DeleteConfirmation().isDisplayed())

@@ -77,10 +77,10 @@ public class AddNewUser extends Initialstep
 		EIU.EnterTitle(Title);
 		EIU.EnterInitials(Initials);
 		EIU.SelectRole(Role);
-		EIU.DesignerCheckBoxClick(Designer);
-		EIU.ProjectManagerCheckBoxClick(ProjectManager);
-		EIU.ProductionManagerCheckBoxClick(ProductionManager);
-		EIU.SalesRepCheckBoxClick(SalesRep);
+		EIU.ClickOnDesignerCheckBox(Designer);
+		EIU.ClickOnProjectManagerCheckBox(ProjectManager);
+		EIU.ClickOnProductionManagerCheckBox(ProductionManager);
+		EIU.ClickOnSalesRepCheckBox(SalesRep);
 		
 		testcase.log(INFO, "New User details added to the fields");
 		takescreenshot(driver, "User Details");
@@ -93,15 +93,15 @@ public class AddNewUser extends Initialstep
 		EIU.SaveButton();
 		Thread.sleep(500);
 		
-		if(EIU.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIU.ConfirmationMessage().toLowerCase().contains("success"))
 		{
-			testcase.log(PASS, "New User added successfully and the '"+ EIU.ConfirmationAlert() +"' message is dispalyed");
+			testcase.log(PASS, "New User added successfully and the '"+ EIU.ConfirmationMessage() +"' message is dispalyed");
 			takescreenshot(driver, "New User added successfully");
 		}
 	
 		else
 		{
-			testcase.log(PASS, "Failed to add new user. The '"+ EIU.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "Failed to add new user. The '"+ EIU.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "Failed to add a new user");
 		}
 	}

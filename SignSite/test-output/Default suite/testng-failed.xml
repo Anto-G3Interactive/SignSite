@@ -3,16 +3,16 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="customers.ValidationCheck">
+      <class name="smoketesting.EditProductAndItsDetails">
         <methods>
-          <include name="InvalidData"/>
-          <include name="mandatorycheck"/>
           <include name="Login"/>
           <include name="Close"/>
-          <include name="NotInRange"/>
-          <include name="DuplicateBusinessName"/>
+          <include name="EditProduct"/>
+          <include name="EditMaterial"/>
+          <include name="EditLabour"/>
+          <include name="EditProductDiscount"/>
         </methods>
-      </class> <!-- customers.ValidationCheck -->
+      </class> <!-- smoketesting.EditProductAndItsDetails -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

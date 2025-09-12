@@ -61,7 +61,7 @@ public class SearchFilterandPagination extends Initialstep
     	EIC.CustomerMenuButton();
     	
     	EIC.ColumnChooserMenu("Hide All");
-    	if(EIC.ConfirmationAlert().contains("Details saved successfully."))
+    	if(EIC.ConfirmationMessage().contains("Details saved successfully."))
     	{
     		testcase.log(PASS, "Hide column is working fine");
     		Thread.sleep(1000);
@@ -75,7 +75,7 @@ public class SearchFilterandPagination extends Initialstep
     	}
     	
     	EIC.ColumnChooserMenu("Show All");
-    	if(EIC.ConfirmationAlert().contains("Details saved successfully."))
+    	if(EIC.ConfirmationMessage().contains("Details saved successfully."))
     	{
     		testcase.log(PASS, "Show column is working fine");
     		Thread.sleep(1000);

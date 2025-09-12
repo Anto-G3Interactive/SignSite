@@ -98,9 +98,9 @@ public class AddNewRole extends Initialstep
 		EIR.SaveRoleButton();
 		Thread.sleep(1500);
 		
-		if(EIR.ConfirmationAlert().contains("successfully"))
+		if(EIR.ConfirmationMessage().contains("successfully"))
 		{
-			testcase.log(PASS, "New Role is added successfully and the '"+ EIR.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "New Role is added successfully and the '"+ EIR.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "New Role added");
 		}
 		else

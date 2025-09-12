@@ -36,7 +36,7 @@ public class EditCustomer extends Initialstep
 			EIC.CustomerMenuButton();
 			EIC.SearchField(SearchContent);
 			Thread.sleep(1500);
-			EIC.EditButton();
+			EIC.EditButton(1);
 			Thread.sleep(1500);
 			EditCustomerDetails();
 			Thread.sleep(1500);
@@ -58,17 +58,17 @@ public class EditCustomer extends Initialstep
 		EIC.EditPrimaryContactButton();
 		EIC.EnterContactName(EditContactName);
 		EIC.EnterContactPhone(EditContactPhone);
-		EIC.ClickOnSaveButton("2");
+		EIC.ClickOnPopUpSaveButton();
 		Thread.sleep(1000);
-			if(EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+			if(EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 			{
-				testcase.log(PASS, "Contact edited and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(PASS, "Contact edited and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(1000);
 				takescreenshot(driver, "Edited The Contact");
 			}
 			else
 			{
-				testcase.log(FAIL, "Failed to update the contact details. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(FAIL, "Failed to update the contact details. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Failed to update the contact");
 			}
@@ -77,17 +77,17 @@ public class EditCustomer extends Initialstep
 		EIC.EnterContactName(AddContactName);
 		EIC.EnterContactEmail(AddContactEmail);
 		EIC.EnterContactPhone(AddContactPhone);
-		EIC.ClickOnSaveButton("2");
+		EIC.ClickOnPopUpSaveButton();
 		Thread.sleep(1000);
-			if(EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+			if(EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 			{
-				testcase.log(PASS, "Contact added and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(PASS, "Contact added and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Added the Contact");
 			}
 			else
 			{
-				testcase.log(FAIL, "Failed to add the contact details. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(FAIL, "Failed to add the contact details. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Failed to add the contact");
 			}
@@ -95,17 +95,17 @@ public class EditCustomer extends Initialstep
 		EIC.EnterStreetAddress(EditStreetAddress);
 		EIC.EnterUnitNumber(EditUnitNumber);
 		EIC.EnterPostcode(EditPostCode);
-		EIC.ClickOnSaveButton("2");
+		EIC.ClickOnPopUpSaveButton();
 		Thread.sleep(1000);
-			if(EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+			if(EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 			{
-				testcase.log(PASS, "Address edited and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(PASS, "Address edited and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Edited The Address");
 			}
 			else
 			{
-				testcase.log(FAIL, "Failed to update the Address details. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(FAIL, "Failed to update the Address details. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Failed to update the Address");
 			}
@@ -113,17 +113,17 @@ public class EditCustomer extends Initialstep
 		EIC.SelectAddressType(AddAddressType);
 		EIC.EnterSearchOnlineAndChooseAddress(SearchOnline);
 		EIC.EnterUnitNumber(AddUnitNumber);
-		EIC.ClickOnSaveButton("2");
+		EIC.ClickOnPopUpSaveButton();
 		Thread.sleep(1000);
-			if(EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+			if(EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 			{
-				testcase.log(PASS, "Address added and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(PASS, "Address added and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Added a new Address");
 			}
 			else
 			{
-				testcase.log(FAIL, "Failed to add the address details. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+				testcase.log(FAIL, "Failed to add the address details. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 				Thread.sleep(500);
 				takescreenshot(driver, "Failed to add a address");
 			}
@@ -134,17 +134,17 @@ public class EditCustomer extends Initialstep
 	{
 		testcase= extentReport.createTest("Save the updated Customer");
 		
-		EIC.ClickOnSaveButton("1");
+		EIC.SaveButton();
 		Thread.sleep(1000);
-		if (EIC.ConfirmationAlert().toLowerCase().contains("successfully"))
+		if (EIC.ConfirmationMessage().toLowerCase().contains("successfully"))
 		{
-			testcase.log(PASS, "A customer is edited successfully and the '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(PASS, "A customer is edited successfully and the '" + EIC.ConfirmationMessage() + "' message is displayed");
 			Thread.sleep(1000);
 			takescreenshot(driver, "Edited Customer");
 		}
 		else
 		{
-			testcase.log(FAIL, "Not able to Edit a New Customer. The '" + EIC.ConfirmationAlert() + "' message is displayed");
+			testcase.log(FAIL, "Not able to Edit a New Customer. The '" + EIC.ConfirmationMessage() + "' message is displayed");
 			Thread.sleep(1000);
 			takescreenshot(driver, "Not able to Edit a New Customer");
 		}

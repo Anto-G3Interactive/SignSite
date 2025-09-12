@@ -1,12 +1,8 @@
 package products;
 
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
+import java.io.IOException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.aventstack.extentreports.ExtentTest;
@@ -17,7 +13,7 @@ public class ElementsInProductPage extends Initialstep
 	WebDriver driver;
 	ExtentTest testcase;
 	
- 	ElementsInProductPage(WebDriver driver, ExtentTest testcase)
+ 	public ElementsInProductPage(WebDriver driver, ExtentTest testcase)
 	{
 		this.driver= driver;
 		this.testcase= testcase;
@@ -30,16 +26,23 @@ public class ElementsInProductPage extends Initialstep
     }
     public void ProductsMenuButton()
     {
-    	driver.findElement(By.xpath("//div[@to='machinery']/..")).click();
+    	try
+    	{
+    		driver.findElement(By.xpath("//div[@to= 'product']/..")).click();
+    	}
+    	catch(Exception e)
+    	{
+    		ProductDropdownMenu();
+    		driver.findElement(By.xpath("//div[@to= 'product']/..")).click();
+    	}
     }
     
 // Elements of Products Page
-    public void SearchField(String SearchValue)
+    public void SearchField(String SearchValue) throws InterruptedException
     {
+    	Thread.sleep(1250);
         WebElement e= driver.findElement(By.xpath("//h6/../..//input[@placeholder='Search']"));
-        e.click();
-        e.sendKeys(Keys.CONTROL, "a");
-        e.sendKeys(SearchValue);
+        ClearAndEnterValue(e, SearchValue);
     }
     
     public void SelectCategory() throws InterruptedException
@@ -57,16 +60,31 @@ public class ElementsInProductPage extends Initialstep
         driver.findElement(By.xpath("//li[@role= 'option' and text()= '"+ status +"']")).click();
     }
     
-    public void EditProduct()
+    public void EditProduct(int index)
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[1]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class,'css-1ia3zz3')])["+ index +"]")).click();
     }
     
-    public void DeleteProduct() throws InterruptedException
+    public void DeleteProduct(int index) throws InterruptedException
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[2]")).click();
-    	Thread.sleep(1000);
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1ffkwrf')])["+ index +"]")).click();
+    	Thread.sleep(1500);
     	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
+    }
+    
+	public void DeletedMessageAndClickOnOkButton(String Data) throws IOException
+    {
+   	   	String s= driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+	   	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
+	    if(s.toLowerCase().contains("success"))
+	    {
+	    	testcase.log(PASS, Data +" deleted and the '"+ s +"' message is displayed");
+    	}
+    	else
+    	{
+    		testcase.log(FAIL, "Failed To Delete");
+    	}
+		driver.findElement(By.xpath("//button[text()= 'OK']")).click();
     }
     
     public void ChangeProductStatus(String status)
@@ -127,7 +145,7 @@ public class ElementsInProductPage extends Initialstep
     	}
     }
     
-    public String ConfirmationAlert()
+    public String ConfirmationMessage()
     {
     	return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
     }
@@ -149,54 +167,44 @@ public class ElementsInProductPage extends Initialstep
     	driver.findElement(By.xpath("//button[text()= 'Product Info']")).click();
     }
     
-    public void EnterProductName(String name)
+    public void EnterProductName(String name) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'name']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(name);
+    	ClearAndEnterValue(e, name);
     }
     
     public void SelectProductCategory(String Category)
     {
     	driver.findElement(By.xpath("//label[@for= 'category']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Category +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given category is not available, selecting first option from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, Category);
     }
     
-    public void EnterDescription(String Description)
+    public void EnterDescription(String Description) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//textarea[@id= 'description']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Description);
+    	ClearAndEnterValue(e, Description);
     }
     
     public void UploadProductImage(String path) throws InterruptedException, AWTException
     {
     // 1st Method
-//    	driver.findElement(By.xpath("//input[@type= 'file']")).sendKeys(path);
+    	driver.findElement(By.xpath("//input[@type= 'file']")).sendKeys(path);
 	
     // 2nd Method	
-    	driver.findElement(By.xpath("//div[@role= 'presentation']")).click();
-    	
-    	StringSelection selection= new StringSelection(path); // Enter a valid file path
-    	Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-		Robot r= new Robot();
-		r.keyPress(KeyEvent.VK_CONTROL);
-		r.keyPress(KeyEvent.VK_V);
-		r.keyRelease(KeyEvent.VK_V);
-		r.keyRelease(KeyEvent.VK_CONTROL);
-		Thread.sleep(2000);
-		r.keyPress(KeyEvent.VK_ENTER);
-		r.keyRelease(KeyEvent.VK_ENTER);
+//    	driver.findElement(By.xpath("//div[@role= 'presentation']")).click();
+//    	Thread.sleep(1250);
+//    	StringSelection selection= new StringSelection(path); // Enter a valid file path
+//    	Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+//    	Thread.sleep(1500);
+//		Robot r= new Robot();
+//		r.keyPress(KeyEvent.VK_CONTROL);
+//		r.keyPress(KeyEvent.VK_V);
+//		r.keyRelease(KeyEvent.VK_V);
+//		r.keyRelease(KeyEvent.VK_CONTROL);
+//		Thread.sleep(2000);
+//		r.keyPress(KeyEvent.VK_ENTER);
+//		r.keyRelease(KeyEvent.VK_ENTER);
+//		Thread.sleep(2500);
     }
     
     public void CancelButton()
@@ -212,22 +220,11 @@ public class ElementsInProductPage extends Initialstep
     public void EnableorDisableBulkDiscount(String change) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@type= 'checkbox']"));
-    	if(change.equals("Disable"))
-    	{
-    		if(e.isSelected())
-    		{
-    			e.click();
-    			Thread.sleep(1500);
-    		}
-    	}
-    	else
-    	{
-    		if(!e.isSelected())
-    		{
-    			e.click();
-    			Thread.sleep(1500);
-    		}
-    		
+    	boolean shouldClick = (change.equals("Disable") && e.isSelected()) || (!change.equals("Disable") && !e.isSelected());
+
+    	if (shouldClick) {
+    	    e.click();
+    	    Thread.sleep(1500);
     	}
     }
     
@@ -277,15 +274,7 @@ public class ElementsInProductPage extends Initialstep
     public void SelectMaterialCategory(String MaterialCategory)
     {
     	driver.findElement(By.xpath("//label[text()= 'Category']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ MaterialCategory +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given material category is not exist, first option is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, MaterialCategory);
     }
     
     public void SelectMaterial(String MaterialName)
@@ -317,15 +306,7 @@ public class ElementsInProductPage extends Initialstep
     public void SelectMaterialUnit(String SelectUnit)
     {
     	driver.findElement(By.xpath("//label[text()= 'Unit']/..//input")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ SelectUnit +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given unit is not exist, first option is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, SelectUnit);
     }
 
     public void EnterMaterialCost(String cost)
@@ -346,19 +327,10 @@ public class ElementsInProductPage extends Initialstep
     public void PerLIUnitEnableorDisable(String setas)
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'is_linear_unit']"));
-    	if(setas.equalsIgnoreCase("Enable"))
+    	boolean shouldClick = (setas.equalsIgnoreCase("Enable") && !e.isSelected()) || (!setas.equalsIgnoreCase("Enable") && e.isSelected());
+    	if (shouldClick) 
     	{
-    		if(!e.isSelected()) 
-    		{
-    			e.click();
-    		}
-    	}
-    	else
-    	{
-    		if(e.isSelected()) 
-    		{
-    			e.click();
-    		}
+    		e.click();
     	}
     }
     
@@ -381,15 +353,7 @@ public class ElementsInProductPage extends Initialstep
     public void SelectMachineryCategory(String MachineryCategory)
     {
     	driver.findElement(By.xpath("//label[text()= 'Category']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ MachineryCategory +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given Machinery category is not exist, first option is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, MachineryCategory);
     }
     
     public void SelectMachinery(String MachineryName)
@@ -421,15 +385,7 @@ public class ElementsInProductPage extends Initialstep
     public void SelectMachineryUnit(String SelectUnit)
     {
     	driver.findElement(By.xpath("//label[text()= 'Units']/..//input")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ SelectUnit +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given unit is not exist, first option is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, SelectUnit);
     }
 
     public void EnterMachineryCost(String cost)
@@ -461,15 +417,7 @@ public class ElementsInProductPage extends Initialstep
     public void SelectLabourCategory(String LabourCategory)
     {
     	driver.findElement(By.xpath("//label[text()= 'Category']/..//div")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ LabourCategory +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given Labour category is not exist, first option is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, LabourCategory);
     }
     
     public void SelectLabour(String LabourName)
@@ -501,15 +449,7 @@ public class ElementsInProductPage extends Initialstep
     public void SelectLabourUnit(String SelectUnit)
     {
     	driver.findElement(By.xpath("//label[text()= 'Unit']/..//input")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ SelectUnit +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given unit is not exist, first option is selected from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, SelectUnit);
     }
 
     public void EnterLabourCost(String cost)
@@ -539,20 +479,21 @@ public class ElementsInProductPage extends Initialstep
     	driver.findElement(By.xpath("(//div[text()= 'materials']/../../..//following-sibling::tr//button[@type= 'button'])[1]")).click();
     }
     
-    public void EditMaterialQuantity(String quantity)
+    public void ConfirmEditsButton()
     {
-    	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[1]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(quantity);
+    	driver.findElement(By.xpath("//button[contains(@class, 'css-qatwap')]")).click();
     }
     
-    public void EditMaterialLIQuantity(String LIquantity)
+    public void EditMaterialQuantity(String quantity) throws InterruptedException
+    {
+    	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[1]"));
+    	ClearAndEnterValue(e, quantity);
+    }
+    
+    public void EditMaterialLIQuantity(String LIquantity) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[2]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(LIquantity);
+    	ClearAndEnterValue(e, LIquantity);
     }
     
     //Machinery
@@ -561,20 +502,16 @@ public class ElementsInProductPage extends Initialstep
     	driver.findElement(By.xpath("(//div[text()= 'machineries']/../../..//following-sibling::tr//button[@type= 'button'])[1]")).click();
     }
     
-    public void EditMachineryQuantity(String quantity)
+    public void EditMachineryQuantity(String quantity) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[1]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(quantity);
+    	ClearAndEnterValue(e, quantity);
     }
     
-    public void EditMachineryLIQuantity(String LIquantity)
+    public void EditMachineryLIQuantity(String LIquantity) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[2]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(LIquantity);
+    	ClearAndEnterValue(e, LIquantity);
     }
     
     // Labour
@@ -583,20 +520,16 @@ public class ElementsInProductPage extends Initialstep
     	driver.findElement(By.xpath("(//div[text()= 'labours']/../../..//following-sibling::tr//button[@type= 'button'])[1]")).click();
     }
     
-    public void EditLabourQuantity(String quantity)
+    public void EditLabourQuantity(String quantity) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[1]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(quantity);
+    	ClearAndEnterValue(e, quantity);
     }
     
-    public void EditLabourLIQuantity(String LIquantity)
+    public void EditLabourLIQuantity(String LIquantity) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("(//input[@type= 'number' and @class= 'form-control'])[2]"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(LIquantity);
+    	ClearAndEnterValue(e, LIquantity);
     }
 
 // Delete Product Details    

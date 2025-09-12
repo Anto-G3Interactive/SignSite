@@ -8,7 +8,7 @@ import basepack.Initialstep;
 
 public class DuplicateMaterialTest extends Initialstep 
 {
-    ElementsInMaterials EIM;
+    ElementsInMaterialsPage EIM;
     
     String Unit= "Kilogram";
     String Cost= "12.33";
@@ -18,7 +18,7 @@ public class DuplicateMaterialTest extends Initialstep
     @Test
     public void DuplicateTest() throws InterruptedException, IOException
     {
-    	EIM = new ElementsInMaterials(driver,testcase);
+    	EIM = new ElementsInMaterialsPage(driver,testcase);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         
         testcase= extentReport.createTest("Verify the duplicate material functionality");

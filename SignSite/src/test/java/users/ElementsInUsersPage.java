@@ -2,7 +2,6 @@ package users;
 
 import java.io.IOException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.aventstack.extentreports.ExtentTest;
@@ -10,7 +9,7 @@ import basepack.Initialstep;
 
 public class ElementsInUsersPage extends Initialstep
 {
-	ElementsInUsersPage(WebDriver driver, ExtentTest testcase)
+	public ElementsInUsersPage(WebDriver driver, ExtentTest testcase)
 	{
 		this.driver= driver;
 		this.testcase= testcase;
@@ -24,17 +23,22 @@ public class ElementsInUsersPage extends Initialstep
 	
 	public void UsersMenuButton()
 	{
-		driver.findElement(By.xpath("//div[@to= 'user']/..")).click();
+		try
+		{
+			driver.findElement(By.xpath("//div[@to= 'user']/..")).click();
+		}
+		catch(Exception e)
+		{
+			RolesAndUsersDropdownMenu();
+			driver.findElement(By.xpath("//div[@to= 'user']/..")).click();
+		}
 	}
 
 // Users Page Elements
 	public void SearchField(String SearchValue) throws InterruptedException
     {
         WebElement e= driver.findElement(By.xpath("//input[@name='#0']"));
-        e.click();
-        e.sendKeys(Keys.CONTROL, "a");
-        Thread.sleep(1000);
-        e.sendKeys(SearchValue);
+        ClearAndEnterValue(e, SearchValue);
     }
     
     public void SelectStatus()
@@ -44,24 +48,31 @@ public class ElementsInUsersPage extends Initialstep
         driver.findElement(By.xpath("//li[@role= 'option' and text()= '"+ status +"']")).click();
     }
 	
-    public void EditButton()
+    public void EditButton(int index)
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[1]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class,'css-1ia3zz3')])["+ index +"]")).click();
     }
     
-    public void DeleteButton() throws InterruptedException
+    public void DeleteButton(int index) throws InterruptedException
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[2]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1ffkwrf')])["+ index +"]")).click();
     	Thread.sleep(1500);
     	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
     }
     
-    public String DeletedMessageAndClickOnOkButton() throws IOException
+	public void DeletedMessageAndClickOnOkButton(String Data) throws IOException
     {
-    	String s= driver.findElement(By.xpath("//div[text()= 'Successfully deleted.']")).getText();
-    	takescreenshot(driver, "Deleted Successfully");
-    	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
-    	return s;
+   	   	String s= driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+	   	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
+	    if(s.toLowerCase().contains("success"))
+	    {
+	    	testcase.log(PASS, Data +" deleted and the '"+ s +"' message is displayed");
+    	}
+    	else
+    	{
+    		testcase.log(FAIL, "Failed To Delete");
+    	}
+		driver.findElement(By.xpath("//button[text()= 'OK']")).click();
     }
     
     public void ChangeStatusButtons()
@@ -72,7 +83,7 @@ public class ElementsInUsersPage extends Initialstep
     	testcase.log(INFO, "Status updated to: "+ e.getText());
     }
     
-    public String ConfirmationAlert()
+    public String ConfirmationMessage()
     {
     	return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
     }
@@ -153,63 +164,50 @@ public class ElementsInUsersPage extends Initialstep
     	driver.findElement(By.xpath("//button[@class= 'btn btn-primary-600']")).click();
     }
     
-    public void EnterName(String Name)
+    public void EnterName(String Name) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'name']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Name);
+    	ClearAndEnterValue(e, Name);
     }
     
-    public void EnterEmail(String Email)
+    public void EnterEmail(String Email) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'email']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Email);
+    	ClearAndEnterValue(e, Email);
     }
     
-    public void EnterPhoneNumber(String Number)
+    public void EnterPhoneNumber(String Number) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'phone']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Number);
+    	ClearAndEnterValue(e, Number);
     }
     
-    public void EnterTitle(String Title)
+    public void EnterTitle(String Title) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'title']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Title);
+    	ClearAndEnterValue(e, Title);
     }
     
-    public void EnterInitials(String Initial)
+    public void EnterInitials(String Initial) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'initials']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(Initial);
+    	ClearAndEnterValue(e, Initial);
     }
     
     public void SelectRole(String Role)
     {
     	driver.findElement(By.xpath("//input[@role= 'combobox']")).click();
-    	try
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Role +"']")).click();
-    	}
-    	catch(Exception e)
-    	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given value is not exist, selected the first value from dropdown");
-    	}
+    	SelectDropdownValue(driver, testcase, Role);
     }
     
-    public void SalesRepCheckBoxClick(String EnableOrDisable)
+    public void ClickOnSalesRepCheckBox(String EnableOrDisable)
     {
-    	WebElement e= driver.findElement(By.xpath("//input[@id= 'responsibility_1']"));
+    	WebElement e= driver.findElement(By.xpath("//label[text()='Sales Rep']/..//input[@name= 'responsibilities']"));
+    	SelectCheckboxes(e, EnableOrDisable);
+    }
+    
+    public void SelectCheckboxes(WebElement e, String EnableOrDisable)
+    {
     	if(!e.isSelected() && EnableOrDisable.toLowerCase().contains("enable"))
     	{
     		e.click();
@@ -220,43 +218,22 @@ public class ElementsInUsersPage extends Initialstep
     	}
     }
     
-    public void ProductionManagerCheckBoxClick(String EnableOrDisable)
+    public void ClickOnProductionManagerCheckBox(String EnableOrDisable)
     {
-    	WebElement e= driver.findElement(By.xpath("//input[@id= 'responsibility_2']"));
-    	if(!e.isSelected() && EnableOrDisable.toLowerCase().contains("enable"))
-    	{
-    		e.click();
-    	}
-    	else if(e.isSelected() && EnableOrDisable.toLowerCase().contains("disable"))
-    	{
-    		e.click();
-    	}
+    	WebElement e= driver.findElement(By.xpath("//label[text()='Production Manager']/..//input[@name= 'responsibilities']"));
+    	SelectCheckboxes(e, EnableOrDisable);
     }
 	
-    public void ProjectManagerCheckBoxClick(String EnableOrDisable)
+    public void ClickOnProjectManagerCheckBox(String EnableOrDisable)
     {
-    	WebElement e= driver.findElement(By.xpath("//input[@id= 'responsibility_3']"));
-    	if(!e.isSelected() && EnableOrDisable.toLowerCase().contains("enable"))
-    	{
-    		e.click();
-    	}
-    	else if(e.isSelected() && EnableOrDisable.toLowerCase().contains("disable"))
-    	{
-    		e.click();
-    	}
+    	WebElement e= driver.findElement(By.xpath("//label[text()='Project Manager']/..//input[@name= 'responsibilities']"));
+    	SelectCheckboxes(e, EnableOrDisable);
     }
     
-    public void DesignerCheckBoxClick(String EnableOrDisable)
+    public void ClickOnDesignerCheckBox(String EnableOrDisable)
     {
-    	WebElement e= driver.findElement(By.xpath("//input[@id= 'responsibility_4']"));
-    	if(!e.isSelected() && EnableOrDisable.toLowerCase().contains("enable"))
-    	{
-    		e.click();
-    	}
-    	else if(e.isSelected() && EnableOrDisable.toLowerCase().contains("disable"))
-    	{
-    		e.click();
-    	}
+    	WebElement e= driver.findElement(By.xpath("//label[text()='Designer']/..//input[@name= 'responsibilities']"));
+    	SelectCheckboxes(e, EnableOrDisable);
     }
     
     public void UploadAvatar(String Path)

@@ -1,7 +1,8 @@
 package roles;
 
+import java.io.IOException;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.aventstack.extentreports.ExtentTest;
@@ -9,8 +10,10 @@ import basepack.Initialstep;
 
 public class ElementsInRolesPage extends Initialstep
 {
+	WebDriver driver;
+	ExtentTest testcase;
 
-	ElementsInRolesPage(WebDriver driver, ExtentTest testcase)
+	public ElementsInRolesPage(WebDriver driver, ExtentTest testcase)
 	{
 		this.testcase= testcase;
 		this.driver= driver;
@@ -24,17 +27,22 @@ public class ElementsInRolesPage extends Initialstep
 	
 	public void RolesMenuButton()
 	{
-		driver.findElement(By.xpath("//div[@to= 'role']/..")).click();
+		try
+		{
+			driver.findElement(By.xpath("//div[@to= 'role']/..")).click();
+		}
+		catch(Exception e)
+		{
+			RolesAndUsersDropdownMenu();
+			driver.findElement(By.xpath("//div[@to= 'role']/..")).click();
+		}
 	}
 
 // Role Access Page
 	public void SearchField(String SearchValue) throws InterruptedException
     {
         WebElement e= driver.findElement(By.xpath("//input[@name='#0']"));
-        e.click();
-        e.sendKeys(Keys.CONTROL, "a");
-        Thread.sleep(1000);
-        e.sendKeys(SearchValue);
+        ClearAndEnterValue(e, SearchValue);
     }
     
     public void SelectStatus()
@@ -44,16 +52,31 @@ public class ElementsInRolesPage extends Initialstep
         driver.findElement(By.xpath("//li[@role= 'option' and text()= '"+ status +"']")).click();
     }
 	
-    public void EditButton()
+    public void EditButton(int index)
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[1]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class,'css-1ia3zz3')])["+ index +"]")).click();
     }
     
-    public void DeleteButton() throws InterruptedException
+    public void DeleteButton(int index) throws InterruptedException
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[2]")).click();
-    	Thread.sleep(1000);
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1ffkwrf')])["+ index +"]")).click();
+    	Thread.sleep(1500);
     	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
+    }
+    
+	public void DeletedMessageAndClickOnOkButton(String Data) throws IOException
+    {
+   	   	String s= driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+	   	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
+	    if(s.toLowerCase().contains("success"))
+	    {
+	    	testcase.log(PASS, Data +" deleted and the '"+ s +"' message is displayed");
+    	}
+    	else
+    	{
+    		testcase.log(FAIL, "Failed To Delete");
+    	}
+		driver.findElement(By.xpath("//button[text()= 'OK']")).click();
     }
     
     public void ChangeStatusButtons()
@@ -120,12 +143,122 @@ public class ElementsInRolesPage extends Initialstep
     	driver.findElement(By.xpath("//button[@class= 'btn btn-primary-600']")).click();
     }
     
-    public void EnterRoleName(String name)
+    public void EnterRoleName(String name) throws InterruptedException
     {
     	WebElement e= driver.findElement(By.xpath("//input[@id= 'title']"));
-    	e.click();
-    	e.sendKeys(Keys.CONTROL, "a");
-    	e.sendKeys(name);
+    	ClearAndEnterValue(e, name);
+    }
+    
+    public void ClickOnAllPermissionsButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("//label[text()= 'Select All Permissions']/..//input[@type= 'checkbox']"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+		    public void enableOrDisableCheck(String EnableOrDisable, WebElement e)
+		    {
+		    	if(EnableOrDisable.toLowerCase().contains("enable"))
+		    	{
+		    		if(!e.isSelected()) {e.click();}
+		    	}
+		    	else if(EnableOrDisable.toLowerCase().contains("disable"))
+		    	{
+		    		if(e.isSelected()) {e.click();}
+		    	}
+		    	else 
+		    	{
+		            throw new IllegalArgumentException("Input must be either 'enable' or 'disable'.");
+		        }
+		    }
+    
+    public void ClickOnAllQuotesRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Quotes']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllSalesOrderRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Sales Order']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllJobsRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Jobs']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllCustomerRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Customer']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllRolesofRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Roles']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllUsersRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Users']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllProductsRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Products']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllCategoryRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Category']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllMaterialRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Material']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllMachineryRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Machinery']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllLabourRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Labour']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllAccountManagementRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Account Management']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllTermsAndConditionsRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Terms And Conditions']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllEmailTemplatesRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Email Templates']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
+    }
+    
+    public void ClickOnAllFormBuilderRolesButton(String EnableOrDisable)
+    {
+    	WebElement e= driver.findElement(By.xpath("((//td[text()= 'Form Builder']/..)//input[@type= 'checkbox'])[1]"));
+    	enableOrDisableCheck(EnableOrDisable, e);
     }
     
     public void SelectRolesAndAccessPerPage(String page, String roles) throws InterruptedException
@@ -156,6 +289,16 @@ public class ElementsInRolesPage extends Initialstep
         }
 
         Thread.sleep(1000);
+    }
+    
+    public void QuotesPageSelectRolesAndAccess(String rolesforpage) throws InterruptedException
+    {    	
+    	SelectRolesAndAccessPerPage("Quotes", rolesforpage);
+    }
+    
+    public void SalesOrderPageSelectRolesAndAccess(String rolesforpage) throws InterruptedException
+    {    	
+    	SelectRolesAndAccessPerPage("Sales Order", rolesforpage);
     }
     
     public void JobsPageSelectRolesAndAccess(String rolesforpage) throws InterruptedException
@@ -218,6 +361,11 @@ public class ElementsInRolesPage extends Initialstep
     	SelectRolesAndAccessPerPage("Email Templates", rolesforpage);
     }
     
+    public void FormBuilderPageSelectRolesAndAccess(String rolesforpage) throws InterruptedException
+    {
+    	SelectRolesAndAccessPerPage("Form Builder", rolesforpage);
+    }
+    
     public void CancelRoleButton()
     {
     	driver.findElement(By.xpath("//button[text()= 'Cancel']")).click();
@@ -228,20 +376,20 @@ public class ElementsInRolesPage extends Initialstep
     	driver.findElement(By.xpath("//button[text()= 'Save']")).click();
     }
     
-    public String ConfirmationAlert()
+    public String ConfirmationMessage()
     {
     	return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
-    }
-    
-    public WebElement DeleteConfirmation()
-    {
-    	return driver.findElement(By.xpath("//div[text()= 'Successfully deleted.']"));
     }
     
     public String DuplicateRole()
     {
     	return driver.findElement(By.xpath("(//div[@data-field= 'title'])[2]")).getText();
     }
+
+	public WebElement DeleteConfirmation() 
+	{
+		return driver.findElement(By.xpath("//div[contains(text(), 'uccess')]"));
+	}
 }
 
 

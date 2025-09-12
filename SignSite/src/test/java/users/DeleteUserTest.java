@@ -12,7 +12,7 @@ public class DeleteUserTest extends Initialstep
 	String ToBeDeleted= "To Be Deleted";
 	
 	@Test
-    public void DeleteRole() throws InterruptedException, IOException 
+    public void DeleteUser() throws InterruptedException, IOException 
     {
     	EIU= new ElementsInUsersPage(driver, testcase);
     	testcase= extentReport.createTest("Verify the Delete Users functionality");
@@ -22,17 +22,10 @@ public class DeleteUserTest extends Initialstep
     	EIU.UsersMenuButton();
     	EIU.SearchField(ToBeDeleted);
     	Thread.sleep(1500);
-    	EIU.DeleteButton();
+    	EIU.DeleteButton(1);
     	Thread.sleep(1000);
-    	
-    	if(EIU.DeletedMessageAndClickOnOkButton().toLowerCase().contains("success"))
-    	{
-    		testcase.log(PASS, "User Deleted and the '"+ EIU.DeletedMessageAndClickOnOkButton()+ "' message is displayed");
-    	}
-    	else
-    	{
-    		testcase.log(FAIL, "User Did not Deleted");
-    	}
+    	takescreenshot(driver, "User Deleted");
+    	EIU.DeletedMessageAndClickOnOkButton("User");
 	}
 }
 

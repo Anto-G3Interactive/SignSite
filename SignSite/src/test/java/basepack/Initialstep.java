@@ -19,6 +19,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.asserts.SoftAssert;
+
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -33,6 +35,7 @@ public class Initialstep
 	public Status PASS= Status.PASS;
 	public Status FAIL= Status.FAIL;
 	public Status INFO= Status.INFO;
+	public SoftAssert softAssert;
 	
 	@BeforeClass
 	public void Login() throws IOException, InterruptedException
@@ -97,7 +100,8 @@ public class Initialstep
         }
         
 		spark= new ExtentSparkReporter("ExtentReport.html");
-		extentReport.attachReporter(spark);		
+		extentReport.attachReporter(spark);	
+		softAssert = new SoftAssert();
 	}
 
 	
@@ -125,22 +129,48 @@ public class Initialstep
 // Failed to Run Script
 	public void FailedToRunScript(Exception e) throws IOException
 	{
-		testcase.log(FAIL, "Failed to Run the Script. <br>"+ "Error: " + e.getMessage().split("\\R", 2)[0]);
-		takescreenshot(driver, "Failed to Run the Script");
-		Assert.fail("Failed to Run the Script."+ "\n"+"\n" + e.getMessage());
+		String Status= driver.findElement(By.xpath("//div[@role= 'status']")).getText();
+		try
+		{
+			testcase.log(FAIL, "Testcase Failed. The '"+ Status +"' message is displayed.");
+			testcase.log(FAIL, "Failed to Run the Script. <br>"+ "Error: " + e.getMessage().split("\\R", 2)[0]);
+			takescreenshot(driver, "Failed to Run the Script");
+			Assert.fail("Failed to Run the Script."+ "\n"+"\n" + e.getMessage());
+		}
+		catch(Exception e1)
+		{
+			testcase.log(FAIL, "Failed to Run the Script. <br>"+ "Error: " + e.getMessage().split("\\R", 2)[0]);
+			takescreenshot(driver, "Failed to Run the Script");
+			Assert.fail("Failed to Run the Script."+ "\n"+"\n" + e.getMessage());
+		}
 	}
 	
 // Selecting Drop-down value which is from API
-	public void SelectDropdownValue(String Name)
+	public void SelectDropdownValue(WebDriver driver, ExtentTest testcase, String Name)
 	{
 		try
     	{
-    		driver.findElement(By.xpath("//div[@role= 'option' and text()= '"+ Name +"']")).click();
+    		driver.findElement(By.xpath("//div[@role= 'option' and contains(text(), '"+ Name +"')]")).click();
     	}
     	catch(Exception e)
     	{
-    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
-    		testcase.log(INFO, "Since the given option '"+ Name +"' does not exist, selected the first option from dropdown");
+    		try
+    		{
+	    		driver.findElement(By.xpath("//div[@role= 'option']")).click();
+	    		testcase.log(INFO, "Since the given option '"+ Name +"' does not exist, selected the first option from dropdown");
+    		}
+    		catch(Exception e1)
+    		{
+    			try
+    			{
+    				driver.findElement(By.xpath("//li[@role= 'option' and contains(text(), '"+ Name +"')]")).click();
+    			}
+    			catch(Exception e2)
+    			{
+    				driver.findElement(By.xpath("//li[@role= 'option']")).click();
+    	    		testcase.log(INFO, "Since the given option '"+ Name +"' does not exist, selected the first option from dropdown");
+    			}
+    		}
     	}
 	}
 	
@@ -148,18 +178,18 @@ public class Initialstep
 	public void ClearAndEnterValue(WebElement e, String Value) throws InterruptedException
 	{
 		e.click();
+		Thread.sleep(500);
         e.sendKeys(Keys.CONTROL, "a");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         e.sendKeys(Value);
 	}
 	
 	@AfterClass
 	public void Close() throws InterruptedException
 	{
-		Thread.sleep(20000);
+		Thread.sleep(10000);
 		driver.close();
 		extentReport.flush();
+		softAssert.assertAll();
 	}
-
-	
 }

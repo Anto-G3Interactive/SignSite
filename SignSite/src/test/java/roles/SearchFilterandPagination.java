@@ -79,7 +79,7 @@ public class SearchFilterandPagination extends Initialstep
     	
     	EIR.ColumnChooserMenu("Hide All");
     	Thread.sleep(1000);
-    	if(EIR.ConfirmationAlert().toLowerCase().contains("success"))
+    	if(EIR.ConfirmationMessage().toLowerCase().contains("success"))
     	{
     		testcase.log(PASS, "Hide column is working fine");
     		Thread.sleep(500);
@@ -95,7 +95,7 @@ public class SearchFilterandPagination extends Initialstep
     	
     	EIR.ColumnChooserMenu("Show All");    
     	Thread.sleep(1000);
-    	if(EIR.ConfirmationAlert().toLowerCase().contains("success"))
+    	if(EIR.ConfirmationMessage().toLowerCase().contains("success"))
     	{
     		testcase.log(PASS, "Show column is working fine");
     		Thread.sleep(500);

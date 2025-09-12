@@ -78,7 +78,7 @@ public class SearchFilterandPagination extends Initialstep
     	
     	EIU.ColumnChooserMenu("Hide All");
     	Thread.sleep(1000);
-    	if(EIU.ConfirmationAlert().toLowerCase().contains("success"))
+    	if(EIU.ConfirmationMessage().toLowerCase().contains("success"))
     	{
     		testcase.log(PASS, "Hide column is working fine");
     		Thread.sleep(500);
@@ -94,7 +94,7 @@ public class SearchFilterandPagination extends Initialstep
     	
     	EIU.ColumnChooserMenu("Show All");
     	Thread.sleep(1000);
-    	if(EIU.ConfirmationAlert().toLowerCase().contains("success"))
+    	if(EIU.ConfirmationMessage().toLowerCase().contains("success"))
     	{
     		testcase.log(PASS, "Show column is working fine");
     		Thread.sleep(500);

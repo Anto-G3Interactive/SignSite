@@ -55,7 +55,7 @@ public class EditRole extends Initialstep
 		EIR.RolesMenuButton();
 		EIR.SearchField(SearchValue);
 		Thread.sleep(1500);
-		EIR.EditButton();
+		EIR.EditButton(1);
 		Thread.sleep(1000);
 		
 		if(driver.findElement(By.xpath("//h6[text()= 'Add Role']")).isDisplayed())
@@ -99,9 +99,9 @@ public class EditRole extends Initialstep
 		EIR.SaveRoleButton();
 		Thread.sleep(1500);
 		
-		if(EIR.ConfirmationAlert().contains("successfully"))
+		if(EIR.ConfirmationMessage().contains("successfully"))
 		{
-			testcase.log(PASS, "Role is edited successfully and the '"+ EIR.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "Role is edited successfully and the '"+ EIR.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "Role updated");
 		}
 		else

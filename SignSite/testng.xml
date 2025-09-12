@@ -4,9 +4,22 @@
   <!-- Smoke Testing -->
   <test name="SmokeTesting"> <!-- mvn -Dtest=smoketesting.* test --> <!-- This to test this package -->
     <classes>
+    <!-- Product and Its Details -->
       <class name="smoketesting.AddProdcutandItsDetails"/> <!-- mvn -Dtest=smoketesting.AddProdcutandItsDetails test --> <!-- This to test this class -->
+      <class name="smoketesting.EditProductAndItsDetails"/>
+      <class name="smoketesting.DeleteProductAndItsDetails"/>
+    <!-- Roles and Users -->
       <class name="smoketesting.AddRolesandUsers"/>
-      <class name="smoketesting.AddJobs"/>
+      <class name="smoketesting.EditRolesAndUsers"/>
+      <class name="smoketesting.DeleteRolesAndUsers"/>
+    <!-- Customer -->
+      <class name="smoketesting.AddEditAndDeleteCustomer"/>
+    <!-- Settings -->
+      <class name="smoketesting.ViewAndEditAccountManagement"/>
+      <class name="smoketesting.ViewAndEditTermsAndConditions"/>
+      <class name="smoketesting.AddEditAndDeleteEmailTemplate"/>
+    <!-- Jobs -->
+    
     </classes>
   </test>
   

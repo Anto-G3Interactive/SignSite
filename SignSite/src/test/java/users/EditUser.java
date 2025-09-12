@@ -70,7 +70,7 @@ public class EditUser extends Initialstep
 	{
 		testcase= extentReport.createTest("Update user details");
 		
-		EIU.EditButton();
+		EIU.EditButton(1);
 		
 		EIU.EnterName(Name);
 		EIU.EnterPhoneNumber(Phone);
@@ -80,15 +80,15 @@ public class EditUser extends Initialstep
 		try
 		{
 			EIU.DeleteAvatar();
-			EIU.DeletedMessageAndClickOnOkButton();
+			EIU.DeletedMessageAndClickOnOkButton("Avata");
 		}
 		catch(Exception e){	}
 		Thread.sleep(1000);
 		EIU.UploadAvatar(ImagePath);
-		EIU.DesignerCheckBoxClick(Designer);
-		EIU.ProjectManagerCheckBoxClick(ProjectManager);
-		EIU.ProductionManagerCheckBoxClick(ProductionManager);
-		EIU.SalesRepCheckBoxClick(SalesRep);
+		EIU.ClickOnDesignerCheckBox(Designer);
+		EIU.ClickOnProjectManagerCheckBox(ProjectManager);
+		EIU.ClickOnProductionManagerCheckBox(ProductionManager);
+		EIU.ClickOnSalesRepCheckBox(SalesRep);
 		
 		testcase.log(INFO, "User details updated to the fields");
 		takescreenshot(driver, "User Details Updated");
@@ -101,14 +101,14 @@ public class EditUser extends Initialstep
 		EIU.SaveButton();
 		Thread.sleep(1000);
 		
-		if(EIU.ConfirmationAlert().toLowerCase().contains("success"))
+		if(EIU.ConfirmationMessage().toLowerCase().contains("success"))
 		{
-			testcase.log(PASS, "User details updated and the '"+ EIU.ConfirmationAlert() +"' message is dispalyed");
+			testcase.log(PASS, "User details updated and the '"+ EIU.ConfirmationMessage() +"' message is dispalyed");
 			takescreenshot(driver, "User Details updated");
 		}	
 		else
 		{
-			testcase.log(PASS, "Failed to update the user. The '"+ EIU.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "Failed to update the user. The '"+ EIU.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "Failed to update the user");
 		}
 	}

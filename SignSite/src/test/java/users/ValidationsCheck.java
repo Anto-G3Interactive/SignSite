@@ -66,9 +66,9 @@ public class ValidationsCheck extends Initialstep
 		EIU.ProceedWithNewButton();
 		Thread.sleep(1000);
 		
-		if(EIU.ConfirmationAlert().toLowerCase().contains("email address is already in use"))
+		if(EIU.ConfirmationMessage().toLowerCase().contains("email address is already in use"))
 		{
-			testcase.log(PASS, "Duplicate Email ID is not accepted in same Company. The '"+ EIU.ConfirmationAlert() +"' message is displayed");
+			testcase.log(PASS, "Duplicate Email ID is not accepted in same Company. The '"+ EIU.ConfirmationMessage() +"' message is displayed");
 			takescreenshot(driver, "Duplicate Checked");
 		}
 		else

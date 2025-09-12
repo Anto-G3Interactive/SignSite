@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
+<testng-results ignored="5" total="6" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-07-15T16:36:38 IST" name="Default suite" finished-at="2025-07-15T16:37:36 IST" duration-ms="58255">
+  <suite started-at="2025-08-21T16:49:42 IST" name="Default suite" finished-at="2025-08-21T16:50:52 IST" duration-ms="69648">
     <groups>
     </groups>
-    <test started-at="2025-07-15T16:36:38 IST" name="Default test" finished-at="2025-07-15T16:37:36 IST" duration-ms="58255">
-      <class name="customers.ValidationCheck">
-        <test-method is-config="true" signature="Login()[pri:0, instance:customers.ValidationCheck@47d9a273]" started-at="2025-07-15T16:36:38 IST" name="Login" finished-at="2025-07-15T16:36:51 IST" duration-ms="13235" status="PASS">
+    <test started-at="2025-08-21T16:49:42 IST" name="Default test" finished-at="2025-08-21T16:50:52 IST" duration-ms="69648">
+      <class name="smoketesting.EditProductAndItsDetails">
+        <test-method is-config="true" signature="Login()[pri:0, instance:smoketesting.EditProductAndItsDetails@70e9c95d]" started-at="2025-08-21T16:49:42 IST" name="Login" finished-at="2025-08-21T16:50:08 IST" duration-ms="26181" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Login -->
-        <test-method signature="mandatorycheck()[pri:1, instance:customers.ValidationCheck@47d9a273]" started-at="2025-07-15T16:36:51 IST" name="mandatorycheck" finished-at="2025-07-15T16:36:55 IST" duration-ms="3349" status="PASS">
+        <test-method signature="EditCategories()[pri:1, instance:smoketesting.EditProductAndItsDetails@70e9c95d]" started-at="2025-08-21T16:50:08 IST" name="EditCategories" finished-at="2025-08-21T16:50:41 IST" duration-ms="32641" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- mandatorycheck -->
-        <test-method signature="InvalidData()[pri:2, instance:customers.ValidationCheck@47d9a273]" started-at="2025-07-15T16:36:55 IST" name="InvalidData" finished-at="2025-07-15T16:37:02 IST" duration-ms="7321" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- InvalidData -->
-        <test-method signature="NotInRange()[pri:3, instance:customers.ValidationCheck@47d9a273]" started-at="2025-07-15T16:37:02 IST" name="NotInRange" finished-at="2025-07-15T16:37:08 IST" duration-ms="6464" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- NotInRange -->
-        <test-method signature="DuplicateBusinessName()[pri:4, instance:customers.ValidationCheck@47d9a273]" started-at="2025-07-15T16:37:08 IST" name="DuplicateBusinessName" finished-at="2025-07-15T16:37:16 IST" duration-ms="7247" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- DuplicateBusinessName -->
-        <test-method is-config="true" signature="Close()[pri:0, instance:customers.ValidationCheck@47d9a273]" started-at="2025-07-15T16:37:16 IST" name="Close" finished-at="2025-07-15T16:37:36 IST" duration-ms="20601" status="PASS">
+        </test-method> <!-- EditCategories -->
+        <test-method is-config="true" signature="Close()[pri:0, instance:smoketesting.EditProductAndItsDetails@70e9c95d]" started-at="2025-08-21T16:50:41 IST" name="Close" finished-at="2025-08-21T16:50:52 IST" duration-ms="10791" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Close -->
-      </class> <!-- customers.ValidationCheck -->
+      </class> <!-- smoketesting.EditProductAndItsDetails -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

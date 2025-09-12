@@ -1,18 +1,19 @@
 package materials;
 
+import java.io.IOException;
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import com.aventstack.extentreports.ExtentTest;
-
 import basepack.Initialstep;
 
-public class ElementsInMaterials extends Initialstep
+public class ElementsInMaterialsPage extends Initialstep
 {
     WebDriver driver;
-    public ElementsInMaterials(WebDriver driver, ExtentTest testcase) 
+    ExtentTest testcase;
+    
+    public ElementsInMaterialsPage(WebDriver driver, ExtentTest testcase) 
     {
         this.driver = driver;
         this.testcase= testcase;
@@ -25,13 +26,22 @@ public class ElementsInMaterials extends Initialstep
     }  
     public void MaterialMenuButton() 
     {
-        driver.findElement(By.xpath("//div[text()='Material']")).click();
+    	try
+    	{
+    		driver.findElement(By.xpath("//div[text()='Material']")).click();
+    	}
+    	catch(Exception e) 
+    	{
+    		ProductDropdownMenu();
+    		driver.findElement(By.xpath("//div[text()='Material']")).click();
+    	}
     }
     
 // Elements of Material Page
-    public WebElement SearchField()
+    public void SearchField(String SearchValue) throws InterruptedException
     {
-        return driver.findElement(By.xpath("//input[@name='#0']"));
+        WebElement e= driver.findElement(By.xpath("//input[@name='#0']"));
+        ClearAndEnterValue(e, SearchValue);
     }
     
     public void SelectCategory() throws InterruptedException
@@ -49,16 +59,31 @@ public class ElementsInMaterials extends Initialstep
         driver.findElement(By.xpath("//li[@role= 'option' and text()= '"+ status +"']")).click();
     }
     
-    public void EditButton()
+    public void EditButton(int index)
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[1]")).click();
+    	driver.findElement(By.xpath("(//button[contains(@class,'css-1ia3zz3')])["+ index +"]")).click();
     }
     
-    public void DeleteButton() throws InterruptedException
+    public void DeleteButton(int index) throws InterruptedException
     {
-    	driver.findElement(By.xpath("(//div[@data-rowindex= '0']//button[@type= 'button' and @style])[2]")).click();
-    	Thread.sleep(1000);
+    	driver.findElement(By.xpath("(//button[contains(@class, 'css-1ffkwrf')])["+ index +"]")).click();
+    	Thread.sleep(1500);
     	driver.findElement(By.xpath("//button[text()= 'Yes, delete it!']")).click();
+    }
+    
+	public void DeletedMessageAndClickOnOkButton(String Data) throws IOException
+    {
+   	   	String s= driver.findElement(By.xpath("(//div[@role= 'dialog']//h2/following-sibling::div)[1]")).getText();
+	   	driver.findElement(By.xpath("//button[text()= 'OK']")).click();
+	    if(s.toLowerCase().contains("success"))
+	    {
+	    	testcase.log(PASS, Data +" deleted and the '"+ s +"' message is displayed");
+    	}
+    	else
+    	{
+    		testcase.log(FAIL, "Failed To Delete");
+    	}
+		driver.findElement(By.xpath("//button[text()= 'OK']")).click();
     }
     
     public void ChangeStatusButtons()
@@ -68,6 +93,11 @@ public class ElementsInMaterials extends Initialstep
     	e.click();
     	testcase.log(INFO, "Status updated to: "+ e.getText());
     }
+    
+    public String ConfirmationMessage()
+	{
+		return driver.findElement(By.xpath("//div[@role= 'status']")).getText();
+	}
     
  // Pagination
     public void RowsPerPage(String RPP)
@@ -121,7 +151,7 @@ public class ElementsInMaterials extends Initialstep
     public void SelectMaterialCategory(String Category)
     {
     	driver.findElement(By.xpath("//label[text()= 'Category']/following-sibling::div")).click();
-    	SelectDropdownValue(Category);
+    	SelectDropdownValue(driver, testcase, Category);
     }
     
     public void EnterMaterialName(String Name) throws InterruptedException
@@ -133,7 +163,7 @@ public class ElementsInMaterials extends Initialstep
     public void SelectUnit (String unit)
     {
     	driver.findElement(By.xpath("//label[text()= 'Unit']/following-sibling::div")).click();
-    	SelectDropdownValue(unit);
+    	SelectDropdownValue(driver, testcase, unit);
     }
     
     public void EnterCost(String cost) throws InterruptedException 
@@ -150,13 +180,13 @@ public class ElementsInMaterials extends Initialstep
     
     public void EnterDescription (String Description) throws InterruptedException
     {
-    	WebElement e= driver.findElement(By.xpath("//input[@id= 'description']"));
+    	WebElement e= driver.findElement(By.xpath("//textarea[@id= 'description']"));
     	ClearAndEnterValue(e, Description);
     }
     
     public void EnterPODescription (String PODescription) throws InterruptedException
     {
-    	WebElement e= driver.findElement(By.xpath("//input[@id= 'po_description']"));
+    	WebElement e= driver.findElement(By.xpath("//textarea[@id= 'po_description']"));
     	ClearAndEnterValue(e, PODescription);
     }
     
