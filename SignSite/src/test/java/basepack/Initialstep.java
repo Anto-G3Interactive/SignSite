@@ -57,7 +57,7 @@ public class Initialstep
 
 		testcase= extentReport.createTest("Verifying the Login process");
 		driver.get(url);
-		testcase.log(Status.INFO, "Navigating to Dashboar Page to confirm the login");
+		testcase.log(Status.INFO, "Navigating to Dashboard Page to confirm the login");
         Thread.sleep(1000);
         String currenturl= driver.getCurrentUrl();
         if(currenturl.equals(url))
@@ -129,9 +129,9 @@ public class Initialstep
 // Failed to Run Script
 	public void FailedToRunScript(Exception e) throws IOException
 	{
-		String Status= driver.findElement(By.xpath("//div[@role= 'status']")).getText();
 		try
 		{
+			String Status= driver.findElement(By.xpath("//div[@role= 'status']")).getText();
 			testcase.log(FAIL, "Testcase Failed. The '"+ Status +"' message is displayed.");
 			testcase.log(FAIL, "Failed to Run the Script. <br>"+ "Error: " + e.getMessage().split("\\R", 2)[0]);
 			takescreenshot(driver, "Failed to Run the Script");

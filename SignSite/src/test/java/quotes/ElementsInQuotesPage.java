@@ -757,7 +757,7 @@ public class ElementsInQuotesPage extends Initialstep
 					driver.findElement(By.xpath("//button[contains(text(), 'Close Transaction Information')]")).click();
 				}
 				
-				// Pending
+////// Pending
 				
 				public void CloseTransactionInformationButton()
 				{
@@ -806,19 +806,17 @@ public class ElementsInQuotesPage extends Initialstep
 				driver.findElement(By.xpath("//li[contains(text(), 'Down Payment Invoice')]")).click();
 			}
 			
-		// Export to XLS
+		// Export to XLS			
 			public void ClickOnExportQuoteToXLS()
 			{
 				driver.findElement(By.xpath("(//li[contains(text(), 'Quote')])[2]")).click();
 			}
 		
-		// Void and Unvoid
+		// Void and Unvoid			
 			public void ClickOnVoidButton()
 			{
 				driver.findElement(By.xpath("//li[contains(text(), 'Void')]")).click();
 			}
-			
-			// Pending
 			
 			public void ClickOnUnvoidButton()
 			{
@@ -826,7 +824,7 @@ public class ElementsInQuotesPage extends Initialstep
 			}
 			
 		    
-	// Add Items
+	// Add Items			
 		public void AddItemsButton()
 		{
 			driver.findElement(By.xpath("//button[text()= 'Add Items']")).click();
@@ -930,20 +928,19 @@ public class ElementsInQuotesPage extends Initialstep
 				driver.findElement(By.xpath("//button[contains(@class, 'css-1fntcqw')]")).click();
 			}
 	
-	// Import Products
+	// Import Products			
 		public void ImportProducts()
 		{
 			driver.findElement(By.xpath("//button[text()='Import Products']")).click();
 		}
 		
-	// Items
+	// Items		
 		public void ItemCollapseOrExpand()
 		{
 			driver.findElement(By.xpath("//button[contains(@class, 'css-mfslm7')]")).click();
 		}
 		
-		// Edit Item Details & Description
-		
+		// Edit Item Details & Description		
 			public void ItemEditName(String name) throws InterruptedException
 			{
 				WebElement e= driver.findElement(By.xpath("(//div[contains(@class, 'css-1axth77')]//input)[1]"));
@@ -1000,20 +997,32 @@ public class ElementsInQuotesPage extends Initialstep
 				driver.findElement(By.xpath("//div[@class= 'MuiBox-root css-gg4vpm']//button[text()= 'Save']")).click();
 			}
 			
-			// Price Breakdown
-			
+			// Price Breakdown			
 				public void PriceBreakdown()
 				{
 					driver.findElement(By.xpath("//button[contains(@class, 'css-5n3njm')]")).click();
 				}
 				
-				public void ItemsAddMaterialButton()
-				{
-					driver.findElement(By.xpath("//div[text()= 'Material']/..//button[contains(@class, 'css-e6h54s')]")).click();
-				}
-				// Add Material
+				// Add Material				
+					public void ItemsMaterialTab()
+					{
+						driver.findElement(By.xpath("//button[@role='tab' and text()= 'Material']")).click();
+					}
+					
+					public void ItemsAddMaterialButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Material']/..//button[contains(@class, 'css-e6h54s')]")).click();
+					}
+					
+					public void ItemSelectMaterialCategory(String Category)
+					{
+						driver.findElement(By.xpath("//input[@placeholder='Select product category']")).click();
+					}
+					
+////// Pending Areas
+					
 				
-				// Edit & Delete Material
+				// Edit & Delete Material					
 					public void ItemsMaterialDeleteButton()
 					{
 						driver.findElement(By.xpath("//div[text()= 'Material']/../..//button[contains(@class, 'css-vacoer')]")).click();
@@ -1058,13 +1067,25 @@ public class ElementsInQuotesPage extends Initialstep
 						driver.findElement(By.xpath("//div[text()= 'Material']/../..//button[contains(@class, 'css-ttvz9k')]")).click();
 					}					
 				
-				public void ItemAddMachineryButton()
-				{
-					driver.findElement(By.xpath("//div[text()= 'Machinery']/..//button[contains(@class, 'css-e6h54s')]")).click();
-				}
-				// Add Material
+				// Add Machinery					
+					public void ItemsMachineryTab()
+					{
+						driver.findElement(By.xpath("//button[@role='tab' and text()= 'Machinery']")).click();
+					}
+					
+					public void ItemAddMachineryButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Machinery']/..//button[contains(@class, 'css-e6h54s')]")).click();
+					}
+					
+					public void ItemSelectMachineryCategory(String Category)
+					{
+						driver.findElement(By.xpath("//input[@placeholder='Select product category']")).click();
+					}
+								
+////// Pending Areas
 				
-				// Edit & Delete Machinery
+				// Edit & Delete Machinery					
 					public void ItemsMachineryDeleteButton()
 					{
 						driver.findElement(By.xpath("//div[text()= 'Machinery']/../..//button[contains(@class, 'css-vacoer')]")).click();
@@ -1109,13 +1130,26 @@ public class ElementsInQuotesPage extends Initialstep
 						driver.findElement(By.xpath("//div[text()= 'Machinery']/../..//button[contains(@class, 'css-ttvz9k')]")).click();
 					}
 				
-				public void ItemAddLabourButton()
-				{
-					driver.findElement(By.xpath("//div[text()= 'Labour']/..//button[contains(@class, 'css-e6h54s')]")).click();
-				}
-				// Add Material
+
+				// Add Labor				
+					public void ItemsLabourTab()
+					{
+						driver.findElement(By.xpath("//button[@role='tab' and text()= 'Labour']")).click();
+					}
+					
+					public void ItemAddLabourButton()
+					{
+						driver.findElement(By.xpath("//div[text()= 'Labour']/..//button[contains(@class, 'css-e6h54s')]")).click();
+					}
+					
+					public void ItemSelectLabourCategory(String Category)
+					{
+						driver.findElement(By.xpath("//input[@placeholder='Select product category']")).click();
+					}	
+			
+//////Pending Areas
 				
-				// Edit & Delete Labor
+				// Edit & Delete Labor				
 					public void ItemsLabourDeleteButton()
 					{
 						driver.findElement(By.xpath("//div[text()= 'Labour']/../..//button[contains(@class, 'css-vacoer')]")).click();
@@ -1166,7 +1200,9 @@ public class ElementsInQuotesPage extends Initialstep
 		{
 			driver.findElement(By.xpath("//button[contains(@class, 'css-1yj6qc0')]")).click();
 		}
-		
+
+//////Pending Areas
+
 		// Create Job
 		
 		// Copy Line Item
@@ -1197,6 +1233,8 @@ public class ElementsInQuotesPage extends Initialstep
 				driver.findElement(By.xpath("//button[text()= 'Copy Line Item']")).click();
 			}
 		
+//////Pending Areas	
+	
 		// Delete Line Item
 		
 		// Role Up Into line 2
@@ -1206,6 +1244,7 @@ public class ElementsInQuotesPage extends Initialstep
 		{
 			driver.findElement(By.xpath("//button[text()= 'Notes']")).click();
 		}
+		
 		// Add Notes
 			public void AddNewNotesButton()
 			{
