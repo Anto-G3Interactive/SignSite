@@ -3,6 +3,7 @@
 	<name>SignSite</name>
 	<comment></comment>
 	<projects>
+		<project>Itype4Home</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

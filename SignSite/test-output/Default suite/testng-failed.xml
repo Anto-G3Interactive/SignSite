@@ -3,16 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="smoketesting.EditProductAndItsDetails">
+      <class name="category.AddCategory">
         <methods>
           <include name="Login"/>
           <include name="Close"/>
-          <include name="EditProduct"/>
-          <include name="EditMaterial"/>
-          <include name="EditLabour"/>
-          <include name="EditProductDiscount"/>
+          <include name="addcategory"/>
         </methods>
-      </class> <!-- smoketesting.EditProductAndItsDetails -->
+      </class> <!-- category.AddCategory -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
